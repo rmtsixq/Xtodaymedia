@@ -332,7 +332,7 @@ export const videos: Video[] = [
     duration: '15:42',
     views: 12543,
     publishedAt: '2024-01-08',
-    thumbnail: '/images/climate-change-thumb.jpg'
+    thumbnail: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fshopequo.com%2Fblogs%2Fblog%2Fwhat-is-climate-change%3Fsrsltid%3DAfmBOopYGMLwfI64fV4RyO81E_HpQ2YW801KLYnwrUkvvWNODYwJrbPz&psig=AOvVaw1rF5ejXjMWr0NLqfXsfFv1&ust=1753962235318000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCJidwNHA5I4DFQAAAAAdAAAAABAE'
   },
   {
     id: '2',
@@ -343,7 +343,7 @@ export const videos: Video[] = [
     duration: '22:15',
     views: 8901,
     publishedAt: '2024-01-05',
-    thumbnail: '/images/political-discourse-thumb.jpg'
+    thumbnail: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.ragan.com%2Fpolitical-discourse-at-work-managing-the-2024-election%2F&psig=AOvVaw0iMcHzfEKzfNDl2OKagp8u&ust=1753962270122000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCICd4-LA5I4DFQAAAAAdAAAAABAE'
   }
 ];
 
@@ -357,7 +357,7 @@ export const podcasts: Podcast[] = [
     episode: 5,
     duration: '45:30',
     publishedAt: '2024-01-06',
-    thumbnail: '/images/women-stem-thumb.jpg'
+    thumbnail: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D1BmMUpx0I9c&psig=AOvVaw2-vlQ4A3p-uICZ0MIRYJZD&ust=1753962298299000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCJjN0-_A5I4DFQAAAAAdAAAAABAE'
   },
   {
     id: '2',
@@ -368,7 +368,7 @@ export const podcasts: Podcast[] = [
     episode: 3,
     duration: '38:22',
     publishedAt: '2024-01-03',
-    thumbnail: '/images/philosophy-thumb.jpg'
+    thumbnail: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.simplypsychology.org%2Fwhatispsychology.html&psig=AOvVaw24C0grRXFj1DS15G9I0T6e&ust=1753962318952000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqFwoTCOi7wPnA5I4DFQAAAAAdAAAAABAE'
   }
 ];
 
@@ -384,7 +384,7 @@ export const teamMembers: TeamMember[] = [
     social: {
       twitter: 'https://twitter.com/mayajmusic',
       linkedin: 'https://linkedin.com/in/mayajohnson',
-      email: 'maya@hevseltimes.org'
+      email: 'maya@xtimes.org'
     }
   },
   {
@@ -398,7 +398,7 @@ export const teamMembers: TeamMember[] = [
     social: {
       twitter: 'https://twitter.com/sarahgreen_eco',
       linkedin: 'https://linkedin.com/in/drsarahgreen',
-      email: 'sarah@hevseltimes.org'
+      email: 'sarah@xtimes.org'
     }
   },
   {
@@ -412,7 +412,7 @@ export const teamMembers: TeamMember[] = [
     social: {
       twitter: 'https://twitter.com/alexchentech',
       linkedin: 'https://linkedin.com/in/alexchen-ai',
-      email: 'alex@hevseltimes.org'
+      email: 'alex@xtimes.org'
     }
   }
 ];

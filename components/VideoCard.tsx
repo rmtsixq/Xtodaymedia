@@ -25,7 +25,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, variant = 'default' }) => 
   if (variant === 'featured') {
     return (
       <article className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-        <div className="relative h-64 md:h-80">
+        <div className="relative h-64 md:h-80 w-full">
           <Image
             src={getYouTubeThumbnail(video.youtubeId)}
             alt={video.title}
@@ -85,7 +85,7 @@ const VideoCard: React.FC<VideoCardProps> = ({ video, variant = 'default' }) => 
   // Default variant
   return (
     <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group">
-      <div className="relative h-48">
+      <div className="relative h-48 w-full">
         <Image
           src={getYouTubeThumbnail(video.youtubeId)}
           alt={video.title}

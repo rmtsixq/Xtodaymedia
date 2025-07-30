@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Mail, Twitter, Linkedin, Youtube, Instagram } from 'lucide-react';
 
 const Footer = () => {
@@ -49,11 +48,11 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { name: 'Twitter', icon: Twitter, href: 'https://twitter.com/hevseltimes' },
-    { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com/company/hevsel-times' },
-    { name: 'YouTube', icon: Youtube, href: 'https://youtube.com/@hevseltimes' },
-    { name: 'Instagram', icon: Instagram, href: 'https://instagram.com/hevseltimes' },
-    { name: 'Email', icon: Mail, href: 'mailto:contact@hevseltimes.org' }
+    { name: 'Twitter', icon: Twitter, href: 'https://twitter.com/xtimes' },
+    { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com/company/xtimes' },
+    { name: 'YouTube', icon: Youtube, href: 'https://youtube.com/@xtimes' },
+    { name: 'Instagram', icon: Instagram, href: 'https://instagram.com/xtimes' },
+    { name: 'Email', icon: Mail, href: 'mailto:contact@xtimes.org' }
   ];
 
   return (
@@ -88,13 +87,9 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block mb-4">
-              <Image
-                src="/Yazili logo.png"
-                alt="Hevsel Times Logo"
-                width={150}
-                height={50}
-                className="h-12 w-auto brightness-0 invert"
-              />
+              <span className="text-3xl font-serif font-bold text-white">
+                X times
+              </span>
             </Link>
             <p className="text-gray-300 text-sm leading-relaxed mb-6">
               The Middle East's largest student-led academic journal, delivering trustworthy journalism 
@@ -145,7 +140,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} Hevsel Times. All rights reserved.
+              © {currentYear} X times. All rights reserved.
             </div>
             <div className="flex space-x-6 text-sm">
               <Link

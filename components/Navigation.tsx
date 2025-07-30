@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Menu, X, ChevronDown } from 'lucide-react';
 
 const Navigation = () => {
@@ -81,16 +80,11 @@ const Navigation = () => {
     <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <Image
-              src="/blackedlogo.png"
-              alt="Hevsel Times Logo"
-              width={120}
-              height={40}
-              className="h-8 w-auto"
-              priority
-            />
+          {/* Logo/Brand */}
+          <Link href="/" className="flex items-center">
+            <span className="text-2xl font-serif font-bold text-primary">
+              X times
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

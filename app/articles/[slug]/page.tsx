@@ -248,7 +248,7 @@ export async function generateMetadata({ params }: ArticlePageProps) {
   }
 
   return {
-    title: `${article.title} | Hevsel Times`,
+    title: `${article.title} | X times`,
     description: article.excerpt,
     keywords: article.tags.join(', '),
     authors: [{ name: article.author.name }],

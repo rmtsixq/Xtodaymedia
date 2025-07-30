@@ -196,7 +196,7 @@ export default function VideosPage() {
             Get notified when we publish new discussions, interviews, and educational content.
           </p>
           <a
-            href="https://youtube.com/@hevseltimes"
+            href="https://youtube.com/@xtimes"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center space-x-3 bg-white text-red-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200"

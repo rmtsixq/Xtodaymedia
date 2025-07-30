@@ -10,9 +10,19 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#eeb6d8',
-          dark: '#e89dc4',
-          light: '#f4d1e6',
+          DEFAULT: '#8B2635', // Burgundy
+          dark: '#6B1E2A',
+          light: '#A63D4A',
+        },
+        secondary: {
+          DEFAULT: '#F7E7CE', // Champagne
+          dark: '#E6D4B8',
+          light: '#FDF4E3',
+        },
+        accent: {
+          DEFAULT: '#C4A484', // Warm beige
+          dark: '#B08D6B',
+          light: '#D4BFA0',
         },
         background: "var(--background)",
         foreground: "var(--foreground)",

@@ -4,20 +4,20 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Hevsel Times - The Middle East's largest student-led academic journal",
+  title: "X times - The Middle East's largest student-led academic journal",
   description: "Delivering trustworthy journalism through articles, videos, and podcasts with a focus on user experience and accessibility.",
   keywords: "journalism, academic journal, Middle East, student-led, articles, videos, podcasts, STEM, politics, philosophy, women rights",
-  authors: [{ name: "Hevsel Times Editorial Team" }],
+  authors: [{ name: "X times Editorial Team" }],
   openGraph: {
-    title: "Hevsel Times",
+    title: "X times",
     description: "The Middle East's largest student-led academic journal",
     type: "website",
     locale: "en_US",
-    siteName: "Hevsel Times",
+    siteName: "X times",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hevsel Times",
+    title: "X times",
     description: "The Middle East's largest student-led academic journal",
   },
 };

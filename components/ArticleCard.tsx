@@ -27,7 +27,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
     return (
       <article className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
         {showImage && (
-          <div className="relative h-64 md:h-80">
+          <div className="relative h-64 md:h-80 w-full">
             <Image
               src={article.featuredImage}
               alt={article.title}
@@ -159,7 +159,7 @@ const ArticleCard: React.FC<ArticleCardProps> = ({
   return (
     <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
       {showImage && (
-        <div className="relative h-48">
+        <div className="relative h-48 w-full">
           <Image
             src={article.featuredImage}
             alt={article.title}

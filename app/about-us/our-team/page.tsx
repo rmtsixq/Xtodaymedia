@@ -15,7 +15,7 @@ export default function OurTeamPage() {
               Our Team
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Meet the passionate individuals behind Hevsel Times. Our diverse team of students, 
+              Meet the passionate individuals behind X times. Our diverse team of students, 
               scholars, and professionals work together to create impactful journalism and academic content.
             </p>
           </div>
