@@ -7,13 +7,14 @@ import ArticleCard from '@/components/ArticleCard';
 import { articles } from '@/lib/data';
 
 interface ArticlePageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export default function ArticlePage({ params }: ArticlePageProps) {
-  const article = articles.find(a => a.slug === params.slug);
+export default async function ArticlePage({ params }: ArticlePageProps) {
+  const { slug } = await params;
+  const article = articles.find(a => a.slug === slug);
 
   if (!article) {
     notFound();
@@ -239,7 +240,8 @@ export async function generateStaticParams() {
 
 // Generate metadata for each article
 export async function generateMetadata({ params }: ArticlePageProps) {
-  const article = articles.find(a => a.slug === params.slug);
+  const { slug } = await params;
+  const article = articles.find(a => a.slug === slug);
   
   if (!article) {
     return {
