@@ -53,9 +53,9 @@ const Footer = () => {
   ];
 
   const stats = [
-    { icon: Star, label: 'Published Articles', value: '200+' },
-    { icon: Award, label: 'Years of Excellence', value: '3+' },
-    { icon: Users, label: 'Active Contributors', value: '50+' }
+    { icon: Star, label: 'Published Articles', value: 'Dynamic' },
+    { icon: Award, label: 'Years of Excellence', value: '1+' },
+    { icon: Users, label: 'Active Contributors', value: '20+' }
   ];
 
   return (
@@ -79,7 +79,7 @@ const Footer = () => {
                 Stay Informed
               </h2>
               <p className="text-white/90 text-lg mb-6">
-                Join 5,000+ readers getting our weekly digest of the latest research, 
+                Join 500+ readers getting our weekly digest of the latest research, 
                 insights, and opportunities in academia.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 max-w-md">

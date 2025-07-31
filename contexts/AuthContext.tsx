@@ -1,65 +1,87 @@
 'use client';
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, onAuthStateChanged } from '../lib/auth';
-import { UserProfile, getUserProfile } from '../lib/auth';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
+import { getUserProfile, UserProfile } from '@/lib/auth';
 
 interface AuthContextType {
   user: User | null;
-  profile: UserProfile | null;
+  userProfile: UserProfile | null;
   loading: boolean;
   isAdmin: boolean;
+  mounted: boolean;
+  refreshUserProfile: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  profile: null,
-  loading: true,
-  isAdmin: false
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
 };
 
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
+  const isAdmin = userProfile?.isAdmin || false;
+
+  const refreshUserProfile = async () => {
+    if (user) {
+      try {
+        const profile = await getUserProfile(user.uid);
+        setUserProfile(profile);
+      } catch (error) {
+        console.error('Error refreshing user profile:', error);
+      }
+    }
+  };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(async (user) => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setUser(user);
+      
       if (user) {
-        setUser(user);
-        const userProfile = await getUserProfile(user.uid);
-        setProfile(userProfile);
+        try {
+          const profile = await getUserProfile(user.uid);
+          setUserProfile(profile);
+        } catch (error) {
+          console.error('Error getting user profile:', error);
+          setUserProfile(null);
+        }
       } else {
-        setUser(null);
-        setProfile(null);
+        setUserProfile(null);
       }
+      
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => unsubscribe();
   }, []);
 
-  const value = {
-    user,
-    profile,
-    loading,
-    isAdmin: profile?.isAdmin || false
-  };
+  if (!mounted) {
+    return null;
+  }
 
   return (
-    <AuthContext.Provider value={value}>
+    <AuthContext.Provider value={{ 
+      user, 
+      userProfile, 
+      loading, 
+      isAdmin, 
+      mounted,
+      refreshUserProfile 
+    }}>
       {children}
     </AuthContext.Provider>
   );

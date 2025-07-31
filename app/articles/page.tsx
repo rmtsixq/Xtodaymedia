@@ -1,22 +1,49 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Search, Filter, Grid, List, SortAsc, SortDesc } from 'lucide-react';
 import ArticleCard from '@/components/ArticleCard';
-import { articles, categories } from '@/lib/data';
+import { getPublishedArticles } from '@/lib/firestore';
+import { FirebaseArticle } from '@/lib/firestore';
 
 export default function ArticlesPage() {
+  const [articles, setArticles] = useState<FirebaseArticle[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedFilter, setSelectedFilter] = useState('All');
   const [sortBy, setSortBy] = useState('newest');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
+  // Fetch articles from Firebase
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        console.log('Articles sayfası verileri yükleniyor...');
+        const articlesData = await getPublishedArticles();
+        console.log('Articles sayfası verileri:', articlesData);
+        setArticles(articlesData);
+      } catch (error) {
+        console.error('Articles sayfası veri yükleme hatası:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticles();
+  }, []);
+
+  // Get unique categories from articles
+  const categories = useMemo(() => {
+    const uniqueCategories = [...new Set(articles.map(article => article.category))];
+    return uniqueCategories.filter(category => category && category !== '');
+  }, [articles]);
+
   const filteredAndSortedArticles = useMemo(() => {
     let filtered = articles.filter(article => {
       const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            article.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           article.author.name.toLowerCase().includes(searchTerm.toLowerCase());
+                           article.author.toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesCategory = selectedCategory === 'All' || article.category === selectedCategory;
       
@@ -43,7 +70,15 @@ export default function ArticlesPage() {
     }
 
     return filtered;
-  }, [searchTerm, selectedCategory, selectedFilter, sortBy]);
+  }, [articles, searchTerm, selectedCategory, selectedFilter, sortBy]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">

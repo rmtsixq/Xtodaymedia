@@ -8,8 +8,8 @@
 :root {
   --background: #FDF4E3;
   --foreground: #2C1810;
-  --primary: #8B2635;
-  --primary-dark: #6B1E2A;
+  --primary: #8B0000; /* Koyu kırmızı */
+  --primary-dark: #660000; /* Daha koyu kırmızı */
   --primary-light: #A63D4A;
   --secondary: #F7E7CE;
   --secondary-dark: #E6D4B8;
@@ -21,6 +21,8 @@
   --border: #E6D4B8;
   --card: #FFFFFF;
   --card-foreground: #2C1810;
+  --champagne: #F7E7CE; /* Champagne rengi */
+  --champagne-dark: #E6D5B8; /* Daha koyu champagne */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -187,4 +189,91 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary-dark);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-primary-dark {
+  background-color: var(--primary-dark);
+}
+
+.bg-champagne {
+  background-color: var(--champagne);
+}
+
+.bg-champagne-dark {
+  background-color: var(--champagne-dark);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-primary-dark {
+  color: var(--primary-dark);
+}
+
+.border-primary {
+  border-color: var(--primary);
+}
+
+.border-primary-dark {
+  border-color: var(--primary-dark);
+}
+
+.focus\:ring-primary:focus {
+  --tw-ring-color: var(--primary);
+}
+
+.focus\:border-primary:focus {
+  border-color: var(--primary);
+}
+
+.hover\:bg-primary-dark:hover {
+  background-color: var(--primary-dark);
+}
+
+.hover\:text-primary-dark:hover {
+  color: var(--primary-dark);
+}
+
+/* Input focus renkleri */
+input:focus, textarea:focus, select:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1) !important;
+}
+
+/* Placeholder rengi */
+input::placeholder, textarea::placeholder {
+  color: #9CA3AF !important;
+}
+
+/* Select option hover */
+select option:hover {
+  background-color: var(--champagne) !important;
+}
+
+/* Button hover efektleri */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.btn-champagne {
+  background-color: var(--champagne);
+  color: var(--primary);
+  transition: all 0.2s;
+}
+
+.btn-champagne:hover {
+  background-color: var(--champagne-dark);
+  transform: translateY(-1px);
 }

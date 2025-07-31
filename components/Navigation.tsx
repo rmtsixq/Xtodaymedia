@@ -11,7 +11,7 @@ const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  const { user, profile, loading, isAdmin } = useAuth();
+  const { user, userProfile, loading, isAdmin } = useAuth();
   const router = useRouter();
 
   const navigationItems = [
@@ -164,10 +164,23 @@ const Navigation = () => {
                         <span className="hidden xl:inline">Admin</span>
                       </Link>
                     )}
-                    <div className="flex items-center space-x-2">
-                      <User className="w-4 h-4 text-gray-600" />
-                      <span className="text-sm text-gray-700 hidden xl:inline">{profile?.displayName}</span>
-                    </div>
+                    <Link
+                      href="/profile"
+                      className="flex items-center space-x-2 text-gray-700 hover:text-primary font-medium transition-colors duration-200"
+                    >
+                      {userProfile?.profileImage ? (
+                        <img 
+                          src={userProfile.profileImage} 
+                          alt="Profile" 
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 bg-primary-light rounded-full flex items-center justify-center">
+                          <User className="w-4 h-4 text-primary" />
+                        </div>
+                      )}
+                      <span className="text-sm hidden xl:inline">{userProfile?.displayName || 'Profile'}</span>
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="flex items-center space-x-1 text-gray-600 hover:text-red-600 font-medium transition-colors duration-200"
@@ -286,7 +299,7 @@ const Navigation = () => {
                   <div className="space-y-3">
                     <div className="flex items-center space-x-2 text-gray-700 py-2">
                       <User className="w-5 h-5" />
-                      <span className="font-medium">{profile?.displayName}</span>
+                      <span className="font-medium">{userProfile?.displayName}</span>
                       {isAdmin && (
                         <span className="bg-primary text-white text-xs px-2 py-1 rounded-full">Admin</span>
                       )}

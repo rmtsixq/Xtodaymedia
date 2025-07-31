@@ -1,45 +1,89 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'next/navigation';
+import { ArrowLeft, Calendar, User, Eye, Share2, Bookmark, Heart } from 'lucide-react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { notFound } from 'next/navigation';
-import { Calendar, Clock, Eye, User, Tag, ArrowLeft, Share2, Twitter, Linkedin, Facebook } from 'lucide-react';
-import ArticleCard from '@/components/ArticleCard';
-import { articles } from '@/lib/data';
+import { getArticleBySlug } from '@/lib/firestore';
+import { FirebaseArticle } from '@/lib/firestore';
 
-interface ArticlePageProps {
-  params: {
-    slug: string;
-  };
-}
+export default function ArticleDetailPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  
+  const [article, setArticle] = useState<FirebaseArticle | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export default function ArticlePage({ params }: ArticlePageProps) {
-  const article = articles.find(a => a.slug === params.slug);
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        console.log('Article detail yükleniyor, slug:', slug);
+        const articleData = await getArticleBySlug(slug);
+        console.log('Article detail verisi:', articleData);
+        
+        if (articleData) {
+          setArticle(articleData);
+        } else {
+          setError('Article not found');
+        }
+      } catch (error) {
+        console.error('Article detail yükleme hatası:', error);
+        setError('Failed to load article');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!article) {
-    notFound();
+    if (slug) {
+      fetchArticle();
+    }
+  }, [slug]);
+
+  // Author'ı string olarak al
+  const authorName = article ? (
+    typeof article.author === 'string' ? article.author : 
+    (article.author && typeof article.author === 'object' && 'name' in article.author) ? 
+    (article.author as any).name : 'Unknown Author'
+  ) : 'Unknown Author';
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
-  const relatedArticles = articles
-    .filter(a => a.id !== article.id && a.category === article.category)
-    .slice(0, 3);
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const shareText = `Check out this article: ${article.title}`;
+  if (error || !article) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="text-center">
+            <h1 className="text-4xl font-serif font-bold text-gray-900 mb-4">
+              Article Not Found
+            </h1>
+            <p className="text-xl text-gray-600 mb-8">
+              The article you're looking for doesn't exist or has been removed.
+            </p>
+            <Link
+              href="/articles"
+              className="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors duration-200"
+            >
+              Back to Articles
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Back Navigation */}
-      <div className="bg-gray-50 border-b">
+    <div className="min-h-screen bg-gray-50">
+      {/* Back Button */}
+      <div className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link 
+          <Link
             href="/articles"
             className="inline-flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors duration-200"
           >
@@ -50,22 +94,22 @@ export default function ArticlePage({ params }: ArticlePageProps) {
       </div>
 
       {/* Article Header */}
-      <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <header className="mb-8">
-          {/* Category and Editor's Pick */}
-          <div className="flex items-center space-x-3 mb-4">
-            <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
+      <section className="bg-white py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Category Badge */}
+          <div className="mb-6">
+            <span className="inline-block bg-primary-light text-primary px-4 py-2 rounded-full text-sm font-medium">
               {article.category}
             </span>
             {article.isEditorsPick && (
-              <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+              <span className="inline-block bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm font-medium ml-2">
                 Editor's Pick
               </span>
             )}
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6 leading-tight">
+          <h1 className="text-4xl md:text-5xl font-serif font-bold text-gray-900 mb-6">
             {article.title}
           </h1>
 
@@ -75,195 +119,125 @@ export default function ArticlePage({ params }: ArticlePageProps) {
           </p>
 
           {/* Meta Information */}
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between border-t border-b border-gray-200 py-6">
-            <div className="flex items-center space-x-6 mb-4 md:mb-0">
-              {/* Author */}
-              <Link
-                href={`/users/${article.author.username}`}
-                className="flex items-center space-x-3 group"
-              >
-                <Image
-                  src={article.author.avatar}
-                  alt={article.author.name}
-                  width={48}
-                  height={48}
-                  className="rounded-full"
-                />
-                <div>
-                  <div className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                    {article.author.name}
-                  </div>
-                  <div className="text-sm text-gray-500">Author</div>
-                </div>
-              </Link>
-
-              {/* Date and Reading Time */}
-              <div className="flex items-center space-x-4 text-sm text-gray-500">
-                <div className="flex items-center space-x-1">
-                  <Calendar className="w-4 h-4" />
-                  <span>{formatDate(article.publishedAt)}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Clock className="w-4 h-4" />
-                  <span>{article.readTime} min read</span>
-                </div>
-                {article.views && (
-                  <div className="flex items-center space-x-1">
-                    <Eye className="w-4 h-4" />
-                    <span>{article.views.toLocaleString()} views</span>
-                  </div>
-                )}
-              </div>
+          <div className="flex flex-wrap items-center gap-6 text-gray-500 mb-8">
+            <div className="flex items-center space-x-2">
+              <User className="w-4 h-4" />
+              <span>{authorName}</span>
             </div>
-
-            {/* Share Buttons */}
-            <div className="flex items-center space-x-3">
-              <span className="text-sm text-gray-600">Share:</span>
-              <div className="flex items-center space-x-2">
-                <a
-                  href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 text-gray-400 hover:text-blue-500 transition-colors duration-200"
-                >
-                  <Twitter className="w-5 h-5" />
-                </a>
-                <a
-                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 text-gray-400 hover:text-blue-700 transition-colors duration-200"
-                >
-                  <Linkedin className="w-5 h-5" />
-                </a>
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 text-gray-400 hover:text-blue-600 transition-colors duration-200"
-                >
-                  <Facebook className="w-5 h-5" />
-                </a>
-              </div>
+            <div className="flex items-center space-x-2">
+              <Calendar className="w-4 h-4" />
+              <span>
+                {article.publishedAt ? 
+                  new Date(article.publishedAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  }) : 
+                  'Published recently'
+                }
+              </span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Eye className="w-4 h-4" />
+              <span>{article.views || 0} views</span>
             </div>
           </div>
-        </header>
 
-        {/* Featured Image */}
-        <div className="relative h-64 md:h-96 mb-8 rounded-lg overflow-hidden">
-          <Image
-            src={article.featuredImage}
-            alt={article.title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-            priority
-          />
-        </div>
-
-        {/* Article Content */}
-        <div className="prose prose-lg max-w-none mb-12">
-          <div 
-            className="text-gray-800 leading-relaxed"
-            dangerouslySetInnerHTML={{ 
-              __html: article.content.replace(/\n\n/g, '</p><p>').replace(/^/, '<p>').replace(/$/, '</p>').replace(/## /g, '</p><h2 className="text-2xl font-serif font-bold text-gray-900 mt-8 mb-4">').replace(/\n/g, '<br/>') 
-            }}
-          />
-        </div>
-
-        {/* Tags */}
-        <div className="border-t border-gray-200 pt-8 mb-12">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Tags</h3>
-          <div className="flex flex-wrap gap-2">
-            {article.tags.map((tag) => (
-              <Link
-                key={tag}
-                href={`/articles?search=${encodeURIComponent(tag)}`}
-                className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm hover:bg-primary hover:text-white transition-colors duration-200"
-              >
-                {tag}
-              </Link>
-            ))}
+          {/* Action Buttons */}
+          <div className="flex items-center space-x-4">
+            <button className="flex items-center space-x-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors duration-200">
+              <Heart className="w-4 h-4" />
+              <span>Like</span>
+            </button>
+            <button className="flex items-center space-x-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors duration-200">
+              <Bookmark className="w-4 h-4" />
+              <span>Save</span>
+            </button>
+            <button className="flex items-center space-x-2 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors duration-200">
+              <Share2 className="w-4 h-4" />
+              <span>Share</span>
+            </button>
           </div>
         </div>
+      </section>
 
-        {/* Author Bio */}
-        <div className="border-t border-gray-200 pt-8 mb-12">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">About the Author</h3>
-          <Link
-            href={`/users/${article.author.username}`}
-            className="flex items-start space-x-4 p-6 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200 group"
-          >
-            <Image
-              src={article.author.avatar}
-              alt={article.author.name}
-              width={64}
-              height={64}
-              className="rounded-full flex-shrink-0"
+      {/* Featured Image */}
+      {article.featuredImage && (
+        <section className="bg-white border-b">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <img
+              src={article.featuredImage}
+              alt={article.title}
+              className="w-full h-96 object-cover rounded-2xl shadow-lg"
             />
-            <div>
-              <h4 className="text-xl font-serif font-semibold text-gray-900 group-hover:text-primary transition-colors mb-2">
-                {article.author.name}
-              </h4>
-              <p className="text-gray-600">
-                Learn more about {article.author.name} and explore their other articles.
-              </p>
+          </div>
+        </section>
+      )}
+
+      {/* Article Content */}
+      <section className="bg-white py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="prose prose-lg max-w-none">
+            <div className="text-gray-700 leading-relaxed text-lg">
+              {article.content ? (
+                <div dangerouslySetInnerHTML={{ __html: article.content }} />
+              ) : (
+                <div className="space-y-6">
+                  <p>
+                    This is a placeholder for the article content. The full article content would be displayed here.
+                  </p>
+                  <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </p>
+                  <p>
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                  </p>
+                </div>
+              )}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Article Footer */}
+      <section className="bg-gray-50 py-12">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-white rounded-2xl p-8">
+            <h3 className="text-2xl font-serif font-bold text-gray-900 mb-6">
+              About the Author
+            </h3>
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-16 bg-primary-light rounded-full flex items-center justify-center">
+                <User className="w-8 h-8 text-primary" />
+              </div>
+              <div>
+                <h4 className="text-lg font-semibold text-gray-900">{authorName}</h4>
+                <p className="text-gray-600">
+                  Contributing writer at X-Times Media. Specializing in {article.category.toLowerCase()} content.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Related Articles CTA */}
+      <section className="bg-white py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl font-serif font-bold text-gray-900 mb-4">
+            Explore More Articles
+          </h2>
+          <p className="text-xl text-gray-600 mb-8">
+            Discover more insightful content from our collection of articles.
+          </p>
+          <Link
+            href="/articles"
+            className="bg-primary text-white px-8 py-4 rounded-lg font-semibold hover:bg-primary-dark transition-colors duration-200"
+          >
+            Browse All Articles
           </Link>
         </div>
-
-        {/* Related Articles */}
-        {relatedArticles.length > 0 && (
-          <div className="border-t border-gray-200 pt-8">
-            <h3 className="text-2xl font-serif font-bold text-gray-900 mb-6">
-              Related Articles
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {relatedArticles.map((relatedArticle) => (
-                <ArticleCard key={relatedArticle.id} article={relatedArticle} />
-              ))}
-            </div>
-          </div>
-        )}
-      </article>
+      </section>
     </div>
   );
-}
-
-// Generate static params for all articles
-export async function generateStaticParams() {
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
-}
-
-// Generate metadata for each article
-export async function generateMetadata({ params }: ArticlePageProps) {
-  const article = articles.find(a => a.slug === params.slug);
-  
-  if (!article) {
-    return {
-      title: 'Article Not Found',
-    };
-  }
-
-  return {
-    title: `${article.title} | X times`,
-    description: article.excerpt,
-    keywords: article.tags.join(', '),
-    authors: [{ name: article.author.name }],
-    openGraph: {
-      title: article.title,
-      description: article.excerpt,
-      type: 'article',
-      publishedTime: article.publishedAt,
-      authors: [article.author.name],
-      tags: article.tags,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: article.title,
-      description: article.excerpt,
-    },
-  };
 }

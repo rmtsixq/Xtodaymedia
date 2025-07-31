@@ -7,12 +7,14 @@ import {
   updateProfile
 } from 'firebase/auth';
 import { auth, db } from './firebase';
-import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 
 export interface UserProfile {
   uid: string;
   email: string;
   displayName: string;
+  bio?: string;
+  profileImage?: string;
   isAdmin: boolean;
   createdAt: string;
 }
@@ -94,6 +96,17 @@ export const getUserProfile = async (uid: string): Promise<UserProfile | null> =
   } catch (error) {
     console.error('Error getting user profile:', error);
     return null;
+  }
+};
+
+export const updateUserProfile = async (uid: string, updates: Partial<UserProfile>) => {
+  try {
+    const userRef = doc(db, 'users', uid);
+    await updateDoc(userRef, updates);
+    return true;
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    throw error;
   }
 };
 
