@@ -88,7 +88,7 @@ export default function PrivacyPolicyPage() {
               Privacy Policy
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              How we collect, use, and protect your personal information at X Times.
+              How we collect, use, and protect your personal information at Vertias Today.
             </p>
             <div className="mt-6 text-sm text-gray-500">
               <p>Last updated: {new Date().toLocaleDateString()}</p>
@@ -180,11 +180,11 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Legal Notice</h2>
             <div className="space-y-4 text-gray-600">
               <p>
-                This privacy policy is effective as of the date listed above and applies to all users of X Times. 
+                This privacy policy is effective as of the date listed above and applies to all users of Vertias Today. 
                 We may update this policy from time to time, and we will notify users of any material changes.
               </p>
               <p>
-                X Times is committed to protecting your privacy and ensuring the security of your personal information. 
+                Vertias Today is committed to protecting your privacy and ensuring the security of your personal information. 
                 We comply with applicable data protection laws and regulations.
               </p>
               <p>

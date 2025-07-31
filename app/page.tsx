@@ -69,6 +69,14 @@ export default function HomePage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Hero Section - Newsletter Style */}
       <section className="relative bg-gradient-to-br from-primary-light via-primary to-primary-dark text-white overflow-hidden">
+        {/* Logo Background */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-15">
+          <img 
+            src="/logo.png" 
+            alt="Vertias Today Background Logo" 
+            className="w-[500px] h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] object-contain"
+          />
+        </div>
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-primary-dark opacity-60"></div>
         
@@ -80,7 +88,7 @@ export default function HomePage() {
             </div>
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold leading-tight mb-8">
-              X Times
+              Vertias Today
             </h1>
             
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto mb-12">
@@ -111,7 +119,7 @@ export default function HomePage() {
           <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
             <Mail className="w-12 h-12 text-white mx-auto mb-6" />
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
-              Stay Updated with X Times
+              Stay Updated with Vertias Today
             </h2>
             <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
               Get our weekly newsletter with the latest articles, research insights, and thought-provoking content delivered directly to your inbox.
@@ -247,7 +255,7 @@ export default function HomePage() {
               Our Impact
             </h2>
             <p className="text-lg text-white/90">
-              Join our growing community of readers who trust X Times for quality academic journalism.
+              Join our growing community of readers who trust Vertias Today for quality academic journalism.
             </p>
           </div>
           

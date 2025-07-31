@@ -87,7 +87,7 @@ export default function EditorialGuidelinesPage() {
               Editorial Guidelines
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Comprehensive guidelines for submitting high-quality academic content to X Times.
+              Comprehensive guidelines for submitting high-quality academic content to Vertias Today.
             </p>
           </div>
         </div>

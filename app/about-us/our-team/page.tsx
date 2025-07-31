@@ -14,12 +14,12 @@ const extendedTeamData = [
   {
     ...teamMembers[1],
     university: 'Ruzgar Science School',
-    specialization: 'Web Technologies & Digital Platform'
+    specialization: 'Digital Media, Economics & Youth Engagement'
   },
   {
     ...teamMembers[2],
     university: 'Ruzgar Science School',
-    specialization: 'Content Management & Social Media'
+    specialization: 'Web Technologies & Digital Platform'
   }
 ];
 
@@ -52,7 +52,7 @@ export default function OurTeamPage() {
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 leading-tight">
               The Minds Behind
-              <span className="block text-yellow-300">X Times</span>
+              <span className="block text-yellow-300">Vertias Today</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-4xl mx-auto mb-8">
@@ -84,7 +84,7 @@ export default function OurTeamPage() {
               Editorial Leadership
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              Meet the visionaries leading X Times toward excellence in academic journalism and student empowerment.
+              Meet the visionaries leading Vertias Today toward excellence in academic journalism and student empowerment.
             </p>
           </div>
           

@@ -87,14 +87,14 @@ const Navigation = () => {
         <div className="flex justify-between items-center h-20">
           {/* Logo/Brand */}
           <Link href="/" className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">X</span>
+            <div className="w-12 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center overflow-hidden p-2">
+              <img src="/logo.png" alt="Vertias Today" className="w-full h-full object-contain" />
             </div>
             <div>
               <span className="text-2xl font-serif font-bold text-primary">
-                X Times
+                Vertias Today
               </span>
-              <div className="text-xs text-gray-500 -mt-1">Academic Journal</div>
+              
             </div>
           </Link>
 
