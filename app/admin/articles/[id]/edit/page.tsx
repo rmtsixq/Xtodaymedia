@@ -1,16 +1,19 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { createArticle, createSlug, getAllUsers } from '@/lib/firestore';
+import { getArticleById, updateArticle, createSlug, getAllUsers } from '@/lib/firestore';
 import { uploadImage } from '@/lib/firestore';
 import { categories } from '@/lib/data';
 import { ArrowLeft, Save, Eye, EyeOff, Upload, X } from 'lucide-react';
+import { FirebaseArticle } from '@/lib/firestore';
 
-export default function NewArticlePage() {
+export default function EditArticlePage() {
   const { user, isAdmin, loading } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const articleId = params.id as string;
   
   const [formData, setFormData] = useState({
     title: '',
@@ -28,24 +31,25 @@ export default function NewArticlePage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [showPreview, setShowPreview] = useState(false);
+  const [loadingArticle, setLoadingArticle] = useState(true);
   
-  // File upload states
+  // Dosya yükleme state'leri
   const [uploadingImage, setUploadingImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
 
-  // Author options
+  // Yazar seçenekleri
   const [authors, setAuthors] = useState<{ uid: string; displayName: string; email: string }[]>([]);
   const [loadingAuthors, setLoadingAuthors] = useState(true);
 
-  // Redirect if not admin
+  // Admin değilse yönlendir
   React.useEffect(() => {
     if (!loading && !isAdmin) {
       router.push('/');
     }
   }, [isAdmin, loading, router]);
 
-  // Load users
+  // Kullanıcıları yükle
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -53,7 +57,7 @@ export default function NewArticlePage() {
         const users = await getAllUsers();
         setAuthors(users);
       } catch (error) {
-        console.error('Error loading users:', error);
+        console.error('Kullanıcılar yüklenirken hata:', error);
       } finally {
         setLoadingAuthors(false);
       }
@@ -64,7 +68,45 @@ export default function NewArticlePage() {
     }
   }, [isAdmin]);
 
-  if (loading) {
+  // Makale verilerini yükle
+  useEffect(() => {
+    const fetchArticle = async () => {
+      if (!articleId) return;
+      
+      try {
+        setLoadingArticle(true);
+        const article = await getArticleById(articleId);
+        
+        if (article) {
+          setFormData({
+            title: article.title || '',
+            excerpt: article.excerpt || '',
+            content: article.content || '',
+            category: article.category || '',
+            customCategory: '',
+            tags: Array.isArray(article.tags) ? article.tags.join(', ') : '',
+            featuredImage: article.featuredImage || '',
+            status: article.status || 'draft',
+            isEditorsPick: article.isEditorsPick || false,
+                         author: typeof article.author === 'string' ? article.author : 
+               (article.author && typeof article.author === 'object' && 'name' in article.author) ? 
+               (article.author as any).name : ''
+          });
+        }
+      } catch (error) {
+        console.error('Makale yüklenirken hata:', error);
+        setError('Makale yüklenirken bir hata oluştu');
+      } finally {
+        setLoadingArticle(false);
+      }
+    };
+
+    if (isAdmin && articleId) {
+      fetchArticle();
+    }
+  }, [isAdmin, articleId]);
+
+  if (loading || loadingArticle) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
@@ -80,9 +122,6 @@ export default function NewArticlePage() {
     setError('');
 
     try {
-      console.log('Article creation started...');
-      console.log('User:', user);
-      
       const selectedAuthor = authors.find(a => a.uid === formData.author);
       
       const articleData = {
@@ -93,24 +132,17 @@ export default function NewArticlePage() {
         author: selectedAuthor?.displayName || 'Admin',
         category: formData.customCategory || formData.category,
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
-        publishedAt: new Date().toISOString(),
-        readTime: Math.ceil(formData.content.split(' ').length / 200), // ~200 words per minute
         featuredImage: formData.featuredImage || '/images/default-article.jpg',
         isEditorsPick: formData.isEditorsPick,
         status: formData.status,
-        createdBy: user?.uid || ''
+        updatedAt: new Date().toISOString()
       };
 
-      console.log('Article Data:', articleData);
-      console.log('Checking Firebase connection...');
-
-      const articleId = await createArticle(articleData);
-      console.log('Article created successfully! ID:', articleId);
-      
-      router.push('/admin');
+      await updateArticle(articleId, articleData);
+      router.push('/admin/articles');
     } catch (error: any) {
-      console.error('Article creation error:', error);
-      setError(error.message || 'An error occurred while creating the article');
+      console.error('Makale güncelleme hatası:', error);
+      setError(error.message || 'Makale güncellenirken bir hata oluştu');
     } finally {
       setSubmitting(false);
     }
@@ -123,26 +155,23 @@ export default function NewArticlePage() {
     }));
   };
 
-  // File selection function
+  // Dosya seçme fonksiyonu
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Check file type
       if (!file.type.startsWith('image/')) {
-        setError('Please select only image files.');
+        setError('Lütfen sadece resim dosyası seçin.');
         return;
       }
       
-      // Check file size (5MB)
       if (file.size > 5 * 1024 * 1024) {
-        setError('File size must be less than 5MB.');
+        setError('Dosya boyutu 5MB\'dan küçük olmalıdır.');
         return;
       }
       
       setSelectedFile(file);
       setError('');
       
-      // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         setImagePreview(e.target?.result as string);
@@ -151,7 +180,7 @@ export default function NewArticlePage() {
     }
   };
 
-  // File upload function
+  // Dosya yükleme fonksiyonu
   const handleImageUpload = async () => {
     if (!selectedFile) return;
     
@@ -169,16 +198,16 @@ export default function NewArticlePage() {
       setSelectedFile(null);
       setImagePreview('');
       
-      console.log('Image uploaded successfully:', downloadURL);
+      console.log('Resim başarıyla yüklendi:', downloadURL);
     } catch (error) {
-      console.error('Image upload error:', error);
-      setError('An error occurred while uploading the image. Please try again.');
+      console.error('Resim yükleme hatası:', error);
+      setError('Resim yüklenirken bir hata oluştu. Lütfen tekrar deneyin.');
     } finally {
       setUploadingImage(false);
     }
   };
 
-  // Clear file selection
+  // Dosya seçimini temizle
   const clearFileSelection = () => {
     setSelectedFile(null);
     setImagePreview('');
@@ -199,8 +228,8 @@ export default function NewArticlePage() {
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <div>
-                <h1 className="text-3xl font-serif font-bold text-gray-900">New Article</h1>
-                <p className="text-gray-600 mt-1">Create and publish a new article</p>
+                <h1 className="text-3xl font-serif font-bold text-gray-900">Makale Düzenle</h1>
+                <p className="text-gray-600 mt-1">Makale bilgilerini güncelle</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -210,7 +239,7 @@ export default function NewArticlePage() {
                 className="flex items-center space-x-2 px-4 py-2 text-gray-600 hover:text-gray-900 transition-colors"
               >
                 {showPreview ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                <span>Preview</span>
+                <span>Önizleme</span>
               </button>
             </div>
           </div>
@@ -232,7 +261,7 @@ export default function NewArticlePage() {
                 {/* Title */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Title *
+                    Başlık *
                   </label>
                   <input
                     type="text"
@@ -240,14 +269,14 @@ export default function NewArticlePage() {
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
-                    placeholder="Enter article title"
+                    placeholder="Makale başlığını girin"
                   />
                 </div>
 
                 {/* Author Selection */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Author *
+                    Yazar *
                   </label>
                                      <select
                      required
@@ -256,7 +285,7 @@ export default function NewArticlePage() {
                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800"
                      disabled={loadingAuthors}
                    >
-                     <option value="">{loadingAuthors ? 'Loading...' : 'Select author'}</option>
+                     <option value="">{loadingAuthors ? 'Yükleniyor...' : 'Yazar seçin'}</option>
                      {authors.map(author => (
                        <option key={author.uid} value={author.uid}>
                          {author.displayName} ({author.email})
@@ -268,7 +297,7 @@ export default function NewArticlePage() {
                 {/* Excerpt */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Excerpt *
+                    Özet *
                   </label>
                   <textarea
                     required
@@ -276,14 +305,14 @@ export default function NewArticlePage() {
                     value={formData.excerpt}
                     onChange={(e) => handleInputChange('excerpt', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
-                    placeholder="Enter article excerpt"
+                    placeholder="Makale özetini girin"
                   />
                 </div>
 
                 {/* Content */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Content *
+                    İçerik *
                   </label>
                   <textarea
                     required
@@ -291,21 +320,21 @@ export default function NewArticlePage() {
                     value={formData.content}
                     onChange={(e) => handleInputChange('content', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent font-mono text-sm text-red-800 placeholder-red-400"
-                    placeholder="Enter article content (Markdown supported)"
+                    placeholder="Makale içeriğini girin (Markdown desteklenir)"
                   />
                 </div>
 
                 {/* Category */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Category
+                    Kategori
                   </label>
                   <select
                     value={formData.category}
                     onChange={(e) => handleInputChange('category', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800"
                   >
-                    <option value="">Select category</option>
+                    <option value="">Kategori seçin</option>
                     {categories.map(category => (
                       <option key={category} value={category}>{category}</option>
                     ))}
@@ -315,38 +344,38 @@ export default function NewArticlePage() {
                 {/* Custom Category */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Custom Category
+                    Özel Kategori
                   </label>
                   <input
                     type="text"
                     value={formData.customCategory}
                     onChange={(e) => handleInputChange('customCategory', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
-                    placeholder="Custom category name (optional)"
+                    placeholder="Özel kategori adı (opsiyonel)"
                   />
                 </div>
 
                 {/* Tags */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Tags
+                    Etiketler
                   </label>
                   <input
                     type="text"
                     value={formData.tags}
                     onChange={(e) => handleInputChange('tags', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
-                    placeholder="Separate tags with commas (e.g., technology, science, AI)"
+                    placeholder="Etiketleri virgülle ayırın (örn: teknoloji, bilim, AI)"
                   />
                 </div>
 
                 {/* Featured Image */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Featured Image
+                    Öne Çıkan Görsel
                   </label>
                   
-                  {/* Show existing image if available */}
+                  {/* Mevcut resim varsa göster */}
                   {formData.featuredImage && (
                     <div className="mb-4">
                       <img 
@@ -359,12 +388,12 @@ export default function NewArticlePage() {
                         onClick={() => handleInputChange('featuredImage', '')}
                         className="mt-2 text-red-600 hover:text-red-800 text-sm"
                       >
-                        Remove Image
+                        Resmi Kaldır
                       </button>
                     </div>
                   )}
                   
-                  {/* File upload area */}
+                  {/* Dosya yükleme alanı */}
                   <div className="space-y-4">
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
                       <input
@@ -377,7 +406,7 @@ export default function NewArticlePage() {
                       <label htmlFor="image-upload" className="cursor-pointer">
                         <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                         <p className="text-sm text-gray-600">
-                          {selectedFile ? selectedFile.name : 'Select image file'}
+                          {selectedFile ? selectedFile.name : 'Resim dosyası seçin'}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
                           PNG, JPG, GIF (max 5MB)
@@ -385,7 +414,7 @@ export default function NewArticlePage() {
                       </label>
                     </div>
                     
-                    {/* Selected file preview */}
+                    {/* Seçilen dosya preview */}
                     {imagePreview && (
                       <div className="relative">
                         <img 
@@ -403,7 +432,7 @@ export default function NewArticlePage() {
                       </div>
                     )}
                     
-                    {/* Upload button */}
+                    {/* Yükleme butonu */}
                     {selectedFile && (
                       <button
                         type="button"
@@ -414,25 +443,25 @@ export default function NewArticlePage() {
                         {uploadingImage ? (
                           <div className="flex items-center justify-center">
                             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                            Uploading...
+                            Yükleniyor...
                           </div>
                         ) : (
-                          'Upload Image'
+                          'Resmi Yükle'
                         )}
                       </button>
                     )}
                   </div>
                   
-                  {/* Manual URL input (alternative) */}
+                  {/* Manuel URL girişi (alternatif) */}
                   <div className="mt-4">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Or add via URL
+                      Veya URL ile ekle
                     </label>
                     <input
                       type="url"
                       value={formData.featuredImage}
                       onChange={(e) => handleInputChange('featuredImage', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
                       placeholder="https://example.com/image.jpg"
                     />
                   </div>
@@ -445,7 +474,7 @@ export default function NewArticlePage() {
                     onClick={() => router.back()}
                     className="px-6 py-3 text-gray-700 hover:text-gray-900 transition-colors"
                   >
-                    Cancel
+                    İptal
                   </button>
                   <button
                     type="submit"
@@ -455,12 +484,12 @@ export default function NewArticlePage() {
                     {submitting ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                        <span>Saving...</span>
+                        <span>Güncelleniyor...</span>
                       </>
                     ) : (
                       <>
                         <Save className="w-4 h-4" />
-                        <span>Save Article</span>
+                        <span>Makaleyi Güncelle</span>
                       </>
                     )}
                   </button>
@@ -473,21 +502,21 @@ export default function NewArticlePage() {
           <div className="space-y-6">
             {/* Settings */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Ayarlar</h3>
               
               <div className="space-y-4">
                 {/* Status */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Status
+                    Durum
                   </label>
                   <select
                     value={formData.status}
                     onChange={(e) => handleInputChange('status', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800"
                   >
-                    <option value="draft">Draft</option>
-                    <option value="published">Publish</option>
+                    <option value="draft">Taslak</option>
+                    <option value="published">Yayınla</option>
                   </select>
                 </div>
 
@@ -510,14 +539,15 @@ export default function NewArticlePage() {
             {/* Preview */}
             {showPreview && (
               <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Preview</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Önizleme</h3>
                 <div className="prose prose-sm max-w-none">
-                  <h2 className="text-xl font-bold">{formData.title || 'Title'}</h2>
-                  <p className="text-gray-600">{formData.excerpt || 'Excerpt'}</p>
+                  <h2 className="text-xl font-bold">{formData.title || 'Başlık'}</h2>
+                  <p className="text-gray-600">{formData.excerpt || 'Özet'}</p>
                   <div className="mt-4 text-sm text-gray-500">
-                    <p>Category: {formData.customCategory || formData.category || 'Not specified'}</p>
-                    <p>Tags: {formData.tags || 'None'}</p>
-                    <p>Status: {formData.status === 'published' ? 'Will be published' : 'Draft'}</p>
+                                         <p>Yazar: {authors.find(a => a.uid === formData.author)?.displayName || 'Belirtilmemiş'}</p>
+                    <p>Kategori: {formData.customCategory || formData.category || 'Belirtilmemiş'}</p>
+                    <p>Etiketler: {formData.tags || 'Yok'}</p>
+                    <p>Durum: {formData.status === 'published' ? 'Yayınlanacak' : 'Taslak'}</p>
                     {formData.isEditorsPick && <p className="text-yellow-600">⭐ Editor's Pick</p>}
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, getDocs, getDoc, query, where, orderBy, limit, doc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db } from './firebase';
 
@@ -215,6 +215,36 @@ export const getEditorsPicks = async (): Promise<FirebaseArticle[]> => {
   }
 };
 
+export const getArticleById = async (articleId: string): Promise<FirebaseArticle | null> => {
+  try {
+    console.log('getArticleById başladı...');
+    console.log('Article ID:', articleId);
+    
+    const articleRef = doc(db, 'articles', articleId);
+    const articleDoc = await getDoc(articleRef);
+    
+    if (!articleDoc.exists()) {
+      console.log('Makale bulunamadı');
+      return null;
+    }
+    
+    const data = articleDoc.data();
+    console.log('Bulunan makale verisi:', {
+      id: articleDoc.id,
+      title: data.title,
+      status: data.status
+    });
+    
+    return {
+      id: articleDoc.id,
+      ...data
+    } as FirebaseArticle;
+  } catch (error) {
+    console.error('getArticleById hatası:', error);
+    return null;
+  }
+};
+
 export const getArticleBySlug = async (slug: string): Promise<FirebaseArticle | null> => {
   try {
     console.log('getArticleBySlug başladı, slug:', slug);
@@ -394,5 +424,27 @@ export const uploadProfileImage = async (file: File, userId: string): Promise<st
   } catch (error) {
     console.error('Error uploading profile image:', error);
     throw error;
+  }
+};
+
+// Firebase'den tüm kullanıcıları çekme
+export const getAllUsers = async (): Promise<{ uid: string; displayName: string; email: string }[]> => {
+  try {
+    const usersRef = collection(db, 'users');
+    const querySnapshot = await getDocs(usersRef);
+    
+    const users = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        uid: doc.id,
+        displayName: data.displayName || 'Unknown User',
+        email: data.email || 'unknown@email.com'
+      };
+    });
+    
+    return users;
+  } catch (error) {
+    console.error('Kullanıcılar çekilirken hata:', error);
+    return [];
   }
 };

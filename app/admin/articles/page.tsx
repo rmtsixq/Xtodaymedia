@@ -18,7 +18,7 @@ export default function ArticlesManagementPage() {
   const [statusFilter, setStatusFilter] = useState<'all' | 'published' | 'draft'>('all');
   const [selectedArticles, setSelectedArticles] = useState<string[]>([]);
 
-  // Admin değilse yönlendir
+  // Redirect if not admin
   React.useEffect(() => {
     if (!loading && !isAdmin) {
       router.push('/');
@@ -31,7 +31,7 @@ export default function ArticlesManagementPage() {
         const articlesData = await getAllArticles();
         setArticles(articlesData);
       } catch (error) {
-        console.error('Makaleler yüklenirken hata:', error);
+        console.error('Error loading articles:', error);
       } finally {
         setLoadingArticles(false);
       }
@@ -56,17 +56,17 @@ export default function ArticlesManagementPage() {
         article.id === articleId ? { ...article, status: newStatus } : article
       ));
     } catch (error) {
-      console.error('Makale durumu güncellenirken hata:', error);
+      console.error('Error updating article status:', error);
     }
   };
 
   const handleDeleteArticle = async (articleId: string) => {
-    if (confirm('Bu makaleyi silmek istediğinizden emin misiniz?')) {
+    if (confirm('Are you sure you want to delete this article?')) {
       try {
         await deleteArticle(articleId);
         setArticles(prev => prev.filter(article => article.id !== articleId));
       } catch (error) {
-        console.error('Makale silinirken hata:', error);
+        console.error('Error deleting article:', error);
       }
     }
   };
@@ -74,19 +74,19 @@ export default function ArticlesManagementPage() {
   const handleBulkDelete = async () => {
     if (selectedArticles.length === 0) return;
     
-    if (confirm(`${selectedArticles.length} makaleyi silmek istediğinizden emin misiniz?`)) {
+    if (confirm(`Are you sure you want to delete ${selectedArticles.length} articles?`)) {
       try {
         await Promise.all(selectedArticles.map(id => deleteArticle(id)));
         setArticles(prev => prev.filter(article => !selectedArticles.includes(article.id!)));
         setSelectedArticles([]);
       } catch (error) {
-        console.error('Toplu silme hatası:', error);
+        console.error('Bulk delete error:', error);
       }
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('tr-TR', {
+    return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
@@ -117,8 +117,8 @@ export default function ArticlesManagementPage() {
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <div>
-                <h1 className="text-3xl font-serif font-bold text-gray-900">Makale Yönetimi</h1>
-                <p className="text-gray-600 mt-1">Tüm makaleleri görüntüle, düzenle ve yönet</p>
+                <h1 className="text-3xl font-serif font-bold text-gray-900">Article Management</h1>
+                <p className="text-gray-600 mt-1">View, edit and manage all articles</p>
               </div>
             </div>
             <Link
@@ -126,7 +126,7 @@ export default function ArticlesManagementPage() {
               className="flex items-center space-x-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors"
             >
               <Plus className="w-4 h-4" />
-              <span>Yeni Makale</span>
+              <span>New Article</span>
             </Link>
           </div>
         </div>
@@ -140,7 +140,7 @@ export default function ArticlesManagementPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <input
                 type="text"
-                placeholder="Makale ara..."
+                placeholder="Search articles..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
@@ -153,15 +153,15 @@ export default function ArticlesManagementPage() {
                 onChange={(e) => setStatusFilter(e.target.value as 'all' | 'published' | 'draft')}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               >
-                <option value="all">Tüm Durumlar</option>
-                <option value="published">Yayınlanmış</option>
-                <option value="draft">Taslak</option>
+                <option value="all">All Status</option>
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
               </select>
             </div>
             
             <div className="flex items-center space-x-2">
               <span className="text-sm text-gray-600">
-                {filteredArticles.length} makale
+                {filteredArticles.length} articles
               </span>
               {selectedArticles.length > 0 && (
                 <button
@@ -169,7 +169,7 @@ export default function ArticlesManagementPage() {
                   className="flex items-center space-x-1 text-red-600 hover:text-red-700 text-sm"
                 >
                   <Trash2 className="w-4 h-4" />
-                  <span>{selectedArticles.length} seçiliyi sil</span>
+                  <span>Delete {selectedArticles.length} selected</span>
                 </button>
               )}
             </div>
@@ -180,7 +180,7 @@ export default function ArticlesManagementPage() {
         {loadingArticles ? (
           <div className="text-center py-16">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-            <p className="text-gray-600">Makaleler yükleniyor...</p>
+            <p className="text-gray-600">Loading articles...</p>
           </div>
         ) : filteredArticles.length > 0 ? (
           <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -203,22 +203,22 @@ export default function ArticlesManagementPage() {
                       />
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Makale
+                      Article
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Durum
+                      Status
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Kategori
+                      Category
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Yazar
+                      Author
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Tarih
+                      Date
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      İşlemler
+                      Actions
                     </th>
                   </tr>
                 </thead>
@@ -269,8 +269,8 @@ export default function ArticlesManagementPage() {
                           onChange={(e) => handleStatusChange(article.id!, e.target.value as 'published' | 'draft')}
                           className="text-sm border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-primary focus:border-transparent"
                         >
-                          <option value="draft">Taslak</option>
-                          <option value="published">Yayınlanmış</option>
+                          <option value="draft">Draft</option>
+                          <option value="published">Published</option>
                         </select>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -279,7 +279,9 @@ export default function ArticlesManagementPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {article.author}
+                        {typeof article.author === 'string' ? article.author : 
+                          (article.author && typeof article.author === 'object' && 'name' in article.author) ? 
+                          (article.author as any).name : 'Unknown Author'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {formatDate(article.publishedAt)}
@@ -310,17 +312,17 @@ export default function ArticlesManagementPage() {
           <div className="text-center py-16 bg-white rounded-lg shadow">
             <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <h3 className="text-xl font-serif font-semibold text-gray-900 mb-2">
-              Henüz makale yok
+              No articles yet
             </h3>
             <p className="text-gray-600 mb-6">
-              İlk makalenizi oluşturmak için "Yeni Makale" butonuna tıklayın.
+              Click the "New Article" button to create your first article.
             </p>
             <Link
               href="/admin/articles/new"
               className="inline-flex items-center space-x-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors"
             >
               <Plus className="w-4 h-4" />
-              <span>İlk Makaleyi Oluştur</span>
+              <span>Create First Article</span>
             </Link>
           </div>
         )}

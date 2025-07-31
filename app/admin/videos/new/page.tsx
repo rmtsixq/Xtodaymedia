@@ -43,7 +43,9 @@ export default function NewVideoPage() {
 
   const handleYoutubeUrlChange = (url: string) => {
     setFormData(prev => ({ ...prev, youtubeUrl: url }));
-    const extractedId = extractYouTubeId(formData.youtubeUrl);
+    const extractedId = extractYouTubeId(url);
+    console.log('YouTube URL:', url);
+    console.log('Extracted ID:', extractedId);
     setYoutubeId(extractedId || '');
   };
 
@@ -53,7 +55,7 @@ export default function NewVideoPage() {
     setError('');
 
     if (!youtubeId) {
-      setError('Geçersiz YouTube URL');
+      setError('Invalid YouTube URL');
       setSubmitting(false);
       return;
     }
@@ -72,7 +74,7 @@ export default function NewVideoPage() {
       await createVideo(videoData);
       router.push('/admin');
     } catch (error: any) {
-      setError(error.message || 'Video oluşturulurken bir hata oluştu');
+      setError(error.message || 'An error occurred while creating the video');
     } finally {
       setSubmitting(false);
     }
@@ -96,8 +98,8 @@ export default function NewVideoPage() {
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <div>
-                <h1 className="text-3xl font-serif font-bold text-gray-900">Yeni Video</h1>
-                <p className="text-gray-600 mt-1">YouTube video ekle</p>
+                <h1 className="text-3xl font-serif font-bold text-gray-900">New Video</h1>
+                <p className="text-gray-600 mt-1">Add YouTube video</p>
               </div>
             </div>
           </div>
@@ -120,30 +122,30 @@ export default function NewVideoPage() {
                 {/* Title */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Video Başlığı *
+                    Video Title *
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Video başlığını girin"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
+                    placeholder="Enter video title"
                   />
                 </div>
 
                 {/* Description */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Açıklama *
+                    Description *
                   </label>
                   <textarea
                     required
                     rows={4}
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Video açıklamasını girin"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
+                    placeholder="Enter video description"
                   />
                 </div>
 
@@ -157,7 +159,7 @@ export default function NewVideoPage() {
                     required
                     value={formData.youtubeUrl}
                     onChange={(e) => handleYoutubeUrlChange(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
                     placeholder="https://www.youtube.com/watch?v=..."
                   />
                   {youtubeId && (
@@ -171,14 +173,14 @@ export default function NewVideoPage() {
                 {/* Category */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Kategori
+                    Category
                   </label>
                   <select
                     value={formData.category}
                     onChange={(e) => handleInputChange('category', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800"
                   >
-                    <option value="">Kategori seçin</option>
+                    <option value="">Select category</option>
                     {categories.map(category => (
                       <option key={category} value={category}>{category}</option>
                     ))}
@@ -188,14 +190,14 @@ export default function NewVideoPage() {
                 {/* Custom Category */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Özel Kategori
+                    Custom Category
                   </label>
                   <input
                     type="text"
                     value={formData.customCategory}
                     onChange={(e) => handleInputChange('customCategory', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Özel kategori adı (opsiyonel)"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
+                    placeholder="Custom category name (optional)"
                   />
                 </div>
 
@@ -206,8 +208,8 @@ export default function NewVideoPage() {
                      <span className="font-medium text-blue-900">YouTube Thumbnail</span>
                    </div>
                    <p className="text-sm text-blue-800">
-                     Video thumbnail'ı otomatik olarak YouTube'dan alınacak. 
-                     YouTube'un resmi thumbnail API'si kullanılarak en yüksek kalitede görsel sağlanacak.
+                     Video thumbnail will be automatically retrieved from YouTube. 
+                     YouTube's official thumbnail API will be used to provide the highest quality image.
                    </p>
                  </div>
 
@@ -218,22 +220,22 @@ export default function NewVideoPage() {
                     onClick={() => router.back()}
                     className="px-6 py-3 text-gray-700 hover:text-gray-900 transition-colors"
                   >
-                    İptal
+                    Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={submitting || !youtubeId}
+                    disabled={submitting || !formData.title || !formData.description || !formData.youtubeUrl || !youtubeId}
                     className="flex items-center space-x-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50"
                   >
                     {submitting ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                        <span>Kaydediliyor...</span>
+                        <span>Saving...</span>
                       </>
                     ) : (
                       <>
                         <Save className="w-4 h-4" />
-                        <span>Videoyu Kaydet</span>
+                        <span>Save Video</span>
                       </>
                     )}
                   </button>
@@ -246,21 +248,21 @@ export default function NewVideoPage() {
           <div className="space-y-6">
             {/* Settings */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Ayarlar</h3>
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
               
               <div className="space-y-4">
                 {/* Status */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Durum
+                    Status
                   </label>
                   <select
                     value={formData.status}
                     onChange={(e) => handleInputChange('status', e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   >
-                    <option value="draft">Taslak</option>
-                    <option value="published">Yayınla</option>
+                    <option value="draft">Draft</option>
+                    <option value="published">Publish</option>
                   </select>
                 </div>
               </div>
@@ -269,7 +271,7 @@ export default function NewVideoPage() {
             {/* Preview */}
             {youtubeId && (
               <div className="bg-white rounded-lg shadow p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Video Önizleme</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Video Preview</h3>
                 <div className="aspect-video rounded-lg overflow-hidden bg-gray-100 mb-4">
                   <iframe
                     src={`https://www.youtube.com/embed/${youtubeId}`}
@@ -280,21 +282,21 @@ export default function NewVideoPage() {
                   />
                 </div>
                 <div className="space-y-2 text-sm">
-                  <p><strong>Başlık:</strong> {formData.title || 'Belirtilmemiş'}</p>
-                  <p><strong>Kategori:</strong> {formData.customCategory || formData.category || 'Belirtilmemiş'}</p>
-                  <p><strong>Durum:</strong> {formData.status === 'published' ? 'Yayınlanacak' : 'Taslak'}</p>
+                  <p><strong>Title:</strong> {formData.title || 'Not specified'}</p>
+                  <p><strong>Category:</strong> {formData.customCategory || formData.category || 'Not specified'}</p>
+                  <p><strong>Status:</strong> {formData.status === 'published' ? 'Will be published' : 'Draft'}</p>
                 </div>
               </div>
             )}
 
             {/* Help */}
             <div className="bg-blue-50 rounded-lg p-4">
-              <h4 className="font-semibold text-blue-900 mb-2">Yardım</h4>
+              <h4 className="font-semibold text-blue-900 mb-2">Help</h4>
               <ul className="text-sm text-blue-800 space-y-1">
-                <li>• YouTube video URL'sini yapıştırın</li>
-                <li>• Video otomatik olarak thumbnail alacak</li>
-                <li>• Kategori seçin veya özel kategori oluşturun</li>
-                <li>• Taslak olarak kaydedip sonra yayınlayabilirsiniz</li>
+                <li>• Paste the YouTube video URL</li>
+                <li>• Video will automatically get thumbnail</li>
+                <li>• Select category or create custom category</li>
+                <li>• Save as draft and publish later</li>
               </ul>
             </div>
           </div>

@@ -19,14 +19,14 @@ export default function AdminPage() {
   });
   const [loadingStats, setLoadingStats] = useState(true);
 
-  // Admin değilse ana sayfaya yönlendir
+          // Redirect to home page if not admin
   React.useEffect(() => {
     if (!loading && !isAdmin) {
       router.push('/');
     }
   }, [isAdmin, loading, router]);
 
-  // İstatistikleri yükle
+          // Load statistics
   useEffect(() => {
     const fetchStats = async () => {
       if (!isAdmin) return;
@@ -46,10 +46,10 @@ export default function AdminPage() {
           totalArticles: articles.length,
           totalVideos: videos.length,
           totalViews,
-          totalUsers: 1 // Şimdilik sabit
+          totalUsers: 1 // Fixed for now
         });
       } catch (error) {
-        console.error('İstatistikler yüklenirken hata:', error);
+        console.error('Error loading statistics:', error);
       } finally {
         setLoadingStats(false);
       }
@@ -67,7 +67,7 @@ export default function AdminPage() {
   }
 
   if (!isAdmin) {
-    return null; // Yönlendirme sırasında boş sayfa
+    return null; // Empty page during redirect
   }
 
   return (
@@ -78,7 +78,7 @@ export default function AdminPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-serif font-bold text-gray-900">Admin Dashboard</h1>
-              <p className="text-gray-600 mt-1">İçerik yönetimi ve site istatistikleri</p>
+              <p className="text-gray-600 mt-1">Content management and site statistics</p>
             </div>
             <div className="flex items-center space-x-4">
               <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
