@@ -100,10 +100,14 @@ export default function HomePage() {
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
-            {featuredContent.editorsPicks.map((article) => (
-              <ArticleCard key={article.id} article={article} variant="featured" />
-            ))}
+          <div className="text-center py-16">
+            <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <h3 className="text-xl font-serif font-semibold text-gray-900 mb-2">
+              No articles yet
+            </h3>
+            <p className="text-gray-600">
+              Articles will appear here once our editors start publishing content.
+            </p>
           </div>
         </div>
       </section>
@@ -168,7 +172,11 @@ export default function HomePage() {
                   View All Videos
                 </Link>
               </div>
-              <VideoCard video={featuredContent.featuredVideo} variant="featured" />
+              <div className="bg-gray-800 rounded-xl p-8 text-center">
+                <Video className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h4 className="text-lg font-semibold text-white mb-2">No videos yet</h4>
+                <p className="text-gray-400">Featured videos will appear here once uploaded.</p>
+              </div>
             </div>
             
             {/* Featured Podcast */}
@@ -182,7 +190,11 @@ export default function HomePage() {
                   View All Podcasts
                 </Link>
               </div>
-              <PodcastCard podcast={featuredContent.featuredPodcast} variant="featured" />
+              <div className="bg-gray-800 rounded-xl p-8 text-center">
+                <Headphones className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h4 className="text-lg font-semibold text-white mb-2">Coming Soon</h4>
+                <p className="text-gray-400">Podcast content is under development.</p>
+              </div>
             </div>
           </div>
         </div>
