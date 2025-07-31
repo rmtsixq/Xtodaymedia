@@ -86,7 +86,7 @@ export default function EditArticlePage() {
             customCategory: '',
             tags: Array.isArray(article.tags) ? article.tags.join(', ') : '',
             featuredImage: article.featuredImage || '',
-            status: article.status || 'draft',
+            status: (article.status === 'archived' ? 'draft' : article.status) || 'draft',
             isEditorsPick: article.isEditorsPick || false,
                          author: typeof article.author === 'string' ? article.author : 
                (article.author && typeof article.author === 'object' && 'name' in article.author) ? 
