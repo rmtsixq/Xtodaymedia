@@ -3,13 +3,16 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Mail, Lock, Eye, EyeOff, LogIn } from 'lucide-react';
-import { signIn } from '@/lib/auth';
+import { Mail, Lock, Eye, EyeOff, User, UserPlus } from 'lucide-react';
+import { signUp } from '@/lib/auth';
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
@@ -19,11 +22,23 @@ export default function LoginPage() {
     setLoading(true);
     setError('');
 
+    if (password !== confirmPassword) {
+      setError('Şifreler eşleşmiyor');
+      setLoading(false);
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Şifre en az 6 karakter olmalıdır');
+      setLoading(false);
+      return;
+    }
+
     try {
-      await signIn(email, password);
+      await signUp(email, password, displayName);
       router.push('/');
     } catch (error: any) {
-      setError(error.message || 'Giriş yaparken bir hata oluştu');
+      setError(error.message || 'Kayıt olurken bir hata oluştu');
     } finally {
       setLoading(false);
     }
@@ -34,15 +49,15 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="mx-auto h-12 w-12 bg-primary rounded-lg flex items-center justify-center">
-            <LogIn className="h-6 w-6 text-white" />
+            <UserPlus className="h-6 w-6 text-white" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-serif font-bold text-gray-900">
-            Hesabınıza giriş yapın
+            Hesap oluşturun
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Hesabınız yok mu?{' '}
-            <Link href="/auth/signup" className="font-medium text-primary hover:text-primary-dark">
-              Kayıt olun
+            Zaten hesabınız var mı?{' '}
+            <Link href="/auth/login" className="font-medium text-primary hover:text-primary-dark">
+              Giriş yapın
             </Link>
           </p>
         </div>
@@ -55,6 +70,28 @@ export default function LoginPage() {
           )}
 
           <div className="space-y-4">
+            <div>
+              <label htmlFor="displayName" className="block text-sm font-medium text-gray-700">
+                Ad Soyad
+              </label>
+              <div className="mt-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="displayName"
+                  name="displayName"
+                  type="text"
+                  autoComplete="name"
+                  required
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  className="appearance-none relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Ad ve soyadınızı girin"
+                />
+              </div>
+            </div>
+
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 E-posta adresi
@@ -89,12 +126,12 @@ export default function LoginPage() {
                   id="password"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
+                  autoComplete="new-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none relative block w-full pl-10 pr-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Şifrenizi girin"
+                  placeholder="Şifrenizi girin (en az 6 karakter)"
                 />
                 <button
                   type="button"
@@ -102,6 +139,39 @@ export default function LoginPage() {
                   className="absolute inset-y-0 right-0 pr-3 flex items-center"
                 >
                   {showPassword ? (
+                    <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                  ) : (
+                    <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                  )}
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Şifre Tekrarı
+              </label>
+              <div className="mt-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  autoComplete="new-password"
+                  required
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="appearance-none relative block w-full pl-10 pr-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Şifrenizi tekrar girin"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                >
+                  {showConfirmPassword ? (
                     <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
                   ) : (
                     <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
@@ -123,17 +193,17 @@ export default function LoginPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Giriş yapılıyor...
+                  Hesap oluşturuluyor...
                 </span>
               ) : (
-                'Giriş Yap'
+                'Hesap Oluştur'
               )}
             </button>
           </div>
 
           <div className="text-center">
             <p className="text-sm text-gray-600">
-              Admin hesabı: <code className="bg-gray-100 px-2 py-1 rounded">admin@xtimes.org</code>
+              <code className="bg-yellow-100 px-2 py-1 rounded">admin@xtimes.org</code> ile kayıt olursanız admin olursunuz
             </p>
           </div>
         </form>

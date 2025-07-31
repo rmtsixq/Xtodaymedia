@@ -2,12 +2,17 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, ChevronDown, Search, Mail } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Menu, X, ChevronDown, Search, Mail, LogIn, LogOut, User, Settings } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { logOut } from '@/lib/auth';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const { user, profile, loading, isAdmin } = useAuth();
+  const router = useRouter();
 
   const navigationItems = [
     { name: 'Home', href: '/' },
@@ -65,6 +70,15 @@ const Navigation = () => {
   const handleLinkClick = () => {
     setIsMenuOpen(false);
     setActiveDropdown(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      router.push('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
@@ -135,6 +149,52 @@ const Navigation = () => {
                 )}
               </div>
             ))}
+            
+            {/* Auth Section */}
+            {!loading && (
+              <div className="flex items-center space-x-4">
+                {user ? (
+                  <div className="flex items-center space-x-3">
+                    {isAdmin && (
+                      <Link
+                        href="/admin"
+                        className="flex items-center space-x-1 text-primary hover:text-primary-dark font-medium transition-colors duration-200"
+                      >
+                        <Settings className="w-4 h-4" />
+                        <span className="hidden xl:inline">Admin</span>
+                      </Link>
+                    )}
+                    <div className="flex items-center space-x-2">
+                      <User className="w-4 h-4 text-gray-600" />
+                      <span className="text-sm text-gray-700 hidden xl:inline">{profile?.displayName}</span>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center space-x-1 text-gray-600 hover:text-red-600 font-medium transition-colors duration-200"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span className="hidden xl:inline">Çıkış</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center space-x-3">
+                    <Link
+                      href="/auth/login"
+                      className="flex items-center space-x-1 text-gray-700 hover:text-primary font-medium transition-colors duration-200"
+                    >
+                      <LogIn className="w-4 h-4" />
+                      <span className="hidden xl:inline">Giriş</span>
+                    </Link>
+                    <Link
+                      href="/auth/signup"
+                      className="bg-primary text-white hover:bg-primary-dark px-4 py-2 rounded-lg font-medium transition-colors duration-200"
+                    >
+                      Kayıt Ol
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
             
             {/* Newsletter CTA */}
             <Link
@@ -218,6 +278,62 @@ const Navigation = () => {
                 )}
               </div>
             ))}
+            
+            {/* Mobile Auth Section */}
+            {!loading && (
+              <div className="pt-4 border-t border-gray-200 space-y-3">
+                {user ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center space-x-2 text-gray-700 py-2">
+                      <User className="w-5 h-5" />
+                      <span className="font-medium">{profile?.displayName}</span>
+                      {isAdmin && (
+                        <span className="bg-primary text-white text-xs px-2 py-1 rounded-full">Admin</span>
+                      )}
+                    </div>
+                    {isAdmin && (
+                      <Link
+                        href="/admin"
+                        className="flex items-center space-x-2 text-primary hover:text-primary-dark font-medium py-2 transition-colors duration-200"
+                        onClick={handleLinkClick}
+                      >
+                        <Settings className="w-5 h-5" />
+                        <span>Admin Panel</span>
+                      </Link>
+                    )}
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        handleLinkClick();
+                      }}
+                      className="flex items-center space-x-2 text-red-600 hover:text-red-700 font-medium py-2 transition-colors duration-200 w-full text-left"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      <span>Çıkış Yap</span>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    <Link
+                      href="/auth/login"
+                      className="flex items-center justify-center space-x-2 text-gray-700 hover:text-primary font-medium transition-colors duration-200 border border-gray-300 hover:border-primary px-4 py-3 rounded-lg"
+                      onClick={handleLinkClick}
+                    >
+                      <LogIn className="w-5 h-5" />
+                      <span>Giriş Yap</span>
+                    </Link>
+                    <Link
+                      href="/auth/signup"
+                      className="flex items-center justify-center space-x-2 bg-primary text-white hover:bg-primary-dark font-medium transition-colors duration-200 px-4 py-3 rounded-lg"
+                      onClick={handleLinkClick}
+                    >
+                      <User className="w-5 h-5" />
+                      <span>Kayıt Ol</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
             
             {/* Mobile Newsletter CTA */}
             <div className="pt-4 border-t border-gray-200">
