@@ -14,61 +14,37 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-primary-dark opacity-60"></div>
         
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
-                <Star className="w-4 h-4 text-yellow-300" />
-                <span className="text-sm font-medium">The Middle East's Leading Academic Journal</span>
-              </div>
-              
-              <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold leading-tight">
-                X Times
-              </h1>
-              
-              <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-2xl">
-                Student-led academic journalism delivering trustworthy insights across STEM, politics, philosophy, and social justice through articles, videos, and podcasts.
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
-                  href="/articles"
-                  className="bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 text-center shadow-lg hover:shadow-xl"
-                >
-                  Explore Latest Articles
-                </Link>
-                <Link 
-                  href="#newsletter"
-                  className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary transition-all duration-300 text-center"
-                >
-                  Subscribe to Newsletter
-                </Link>
-              </div>
-            </div>
-            
-            <div className="space-y-6">
-              {/* Stats Cards */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-                  <div className="text-3xl font-bold text-white">50+</div>
-                  <div className="text-white/80 text-sm">Published Articles</div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-                  <div className="text-3xl font-bold text-white">25+</div>
-                  <div className="text-white/80 text-sm">Video Essays</div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-                  <div className="text-3xl font-bold text-white">15+</div>
-                  <div className="text-white/80 text-sm">Podcast Episodes</div>
-                </div>
-                <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
-                  <div className="text-3xl font-bold text-white">10K+</div>
-                  <div className="text-white/80 text-sm">Monthly Readers</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+           <div className="text-center">
+             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 mb-8">
+               <Star className="w-4 h-4 text-yellow-300" />
+               <span className="text-sm font-medium">The Middle East's Leading Academic Journal</span>
+             </div>
+             
+             <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold leading-tight mb-8">
+               X Times
+             </h1>
+             
+             <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto mb-12">
+               Student-led academic journalism delivering trustworthy insights across STEM, politics, philosophy, and social justice through articles, videos, and podcasts.
+             </p>
+             
+             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+               <Link 
+                 href="/articles"
+                 className="bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 text-center shadow-lg hover:shadow-xl"
+               >
+                 Explore Latest Articles
+               </Link>
+               <Link 
+                 href="#newsletter"
+                 className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary transition-all duration-300 text-center"
+               >
+                 Subscribe to Newsletter
+               </Link>
+             </div>
+           </div>
+         </div>
       </section>
 
       {/* Newsletter Subscription Section */}
@@ -101,46 +77,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Alumni Success Stories */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
-              Alumni Success Stories
-            </h2>
-            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              Our contributors have been accepted to prestigious universities worldwide, showcasing the quality of our academic community.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 mb-8">
-            {[
-              { name: "Harvard University", count: 3, logo: "🏛️" },
-              { name: "Stanford University", count: 3, logo: "🌲" },
-              { name: "MIT", count: 2, logo: "🔬" },
-              { name: "Oxford University", count: 2, logo: "🇬🇧" },
-              { name: "Columbia University", count: 2, logo: "🗽" },
-              { name: "Brown University", count: 3, logo: "🐻" }
-            ].map((university, index) => (
-              <div key={index} className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-                <div className="text-3xl mb-2">{university.logo}</div>
-                <div className="font-semibold text-sm text-gray-900">{university.name}</div>
-                <div className="text-xs text-gray-600">{university.count} students</div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="text-center">
-            <Link 
-              href="/alumni-success"
-              className="inline-flex items-center space-x-2 text-primary hover:text-primary-dark font-semibold transition-colors duration-200"
-            >
-              <span>View All Success Stories</span>
-              <ChevronRight className="w-5 h-5" />
-            </Link>
-          </div>
-        </div>
-      </section>
+
 
       {/* Editor's Picks */}
       <section className="py-16 bg-gradient-to-br from-gray-100 to-gray-200">

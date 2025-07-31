@@ -19,7 +19,6 @@ const Footer = () => {
       title: 'About',
       links: [
         { name: 'Our Team', href: '/about-us/our-team' },
-        { name: 'Alumni Success', href: '/alumni-success' },
         { name: 'Aim & Scope', href: '/about-us/aim-and-scope' },
         { name: 'Editorial Guidelines', href: '/about-us/editorial-guidelines' }
       ]
@@ -54,9 +53,9 @@ const Footer = () => {
   ];
 
   const stats = [
-    { icon: Users, label: 'Alumni at Top Universities', value: '50+' },
     { icon: Star, label: 'Published Articles', value: '200+' },
-    { icon: Award, label: 'Years of Excellence', value: '3+' }
+    { icon: Award, label: 'Years of Excellence', value: '3+' },
+    { icon: Users, label: 'Active Contributors', value: '50+' }
   ];
 
   return (

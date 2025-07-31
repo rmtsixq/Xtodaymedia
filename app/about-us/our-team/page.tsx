@@ -8,11 +8,6 @@ import { teamMembers } from '@/lib/data';
 const extendedTeamData = [
   {
     ...teamMembers[0],
-    achievements: [
-      'Led editorial team to 200% growth in readership',
-      'Featured speaker at 3 international conferences',
-      'Published 15+ peer-reviewed articles'
-    ],
     university: 'Columbia University',
     graduationYear: '2018',
     articlesPublished: 25,
@@ -21,11 +16,6 @@ const extendedTeamData = [
   },
   {
     ...teamMembers[1],
-    achievements: [
-      'Pioneered environmental justice section',
-      'Collaborated with 10+ environmental organizations',
-      'Mentor to 20+ student writers'
-    ],
     university: 'Stanford University',
     graduationYear: '2016',
     articlesPublished: 18,
@@ -34,11 +24,6 @@ const extendedTeamData = [
   },
   {
     ...teamMembers[2],
-    achievements: [
-      'Built AI content recommendation system',
-      'Increased digital engagement by 300%',
-      'Technical advisor for 5+ academic platforms'
-    ],
     university: 'MIT',
     graduationYear: '2019',
     articlesPublished: 22,
@@ -54,32 +39,7 @@ const teamStats = [
   { icon: Award, label: 'Industry Awards', value: '8', color: 'text-purple-500' }
 ];
 
-const achievements = [
-  {
-    year: '2021',
-    title: 'Founded X Times',
-    description: 'Established as the first student-led academic journal in the Middle East',
-    icon: Sparkles
-  },
-  {
-    year: '2022',
-    title: 'International Recognition',
-    description: 'Featured in top academic publications and conferences worldwide',
-    icon: Globe
-  },
-  {
-    year: '2023',
-    title: '50+ University Acceptances',
-    description: 'Our contributors gained admission to prestigious universities globally',
-    icon: GraduationCap
-  },
-  {
-    year: '2024',
-    title: '200+ Published Articles',
-    description: 'Reached milestone of 200 published academic articles and research papers',
-    icon: BookOpen
-  }
-];
+
 
 export default function OurTeamPage() {
   return (
@@ -180,21 +140,7 @@ export default function OurTeamPage() {
                     {member.bio}
                   </p>
 
-                  {/* Key Achievements */}
-                  <div className="mb-6">
-                    <h4 className="text-sm font-bold text-gray-900 mb-3 flex items-center">
-                      <Award className="w-4 h-4 mr-2 text-primary" />
-                      Key Achievements
-                    </h4>
-                    <ul className="space-y-2">
-                      {member.achievements.map((achievement, i) => (
-                        <li key={i} className="flex items-start space-x-2 text-sm text-gray-600">
-                          <Star className="w-3 h-3 text-yellow-500 mt-1 flex-shrink-0" />
-                          <span>{achievement}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  
 
                   {/* Stats */}
                   <div className="grid grid-cols-2 gap-4 mb-6">
@@ -262,35 +208,7 @@ export default function OurTeamPage() {
         </div>
       </section>
 
-      {/* Team History & Achievements */}
-      <section className="py-16 bg-gradient-to-br from-gray-100 to-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
-              Our Journey
-            </h2>
-            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              From a small group of passionate students to a leading academic publication platform.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {achievements.map((achievement, index) => {
-              const IconComponent = achievement.icon;
-              return (
-                <div key={index} className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary-light to-primary-dark rounded-full flex items-center justify-center mx-auto mb-4">
-                    <IconComponent className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="text-primary font-bold text-lg mb-2">{achievement.year}</div>
-                  <h3 className="font-serif font-bold text-gray-900 mb-2">{achievement.title}</h3>
-                  <p className="text-gray-600 text-sm">{achievement.description}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+
 
       {/* Values & Culture */}
       <section className="py-16 bg-white">

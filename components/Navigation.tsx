@@ -20,7 +20,6 @@ const Navigation = () => {
       dropdown: [
         { name: 'Aim & Scope', href: '/about-us/aim-and-scope' },
         { name: 'Our Team', href: '/about-us/our-team' },
-        { name: 'Alumni Success', href: '/alumni-success' },
         { name: 'Editorial Guidelines', href: '/about-us/editorial-guidelines' }
       ]
     },
