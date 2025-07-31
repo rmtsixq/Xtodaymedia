@@ -13,7 +13,7 @@ const contactMethods = [
   {
     icon: MessageSquare,
     title: 'General Inquiries',
-    description: 'Questions about X Times',
+    description: 'Questions about Vertias Today',
     contact: 'info@xtimes.org',
     responseTime: 'Usually within 48 hours'
   },
@@ -55,7 +55,7 @@ export default function ContactPage() {
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 leading-tight">
               Contact
-              <span className="block text-yellow-300">X Times</span>
+              <span className="block text-yellow-300">Vertias Today</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-4xl mx-auto mb-8">
@@ -219,7 +219,7 @@ export default function ContactPage() {
                   className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                 />
                 <label htmlFor="newsletter" className="text-sm text-gray-700">
-                  I'd like to subscribe to the X Times newsletter for updates and new content.
+                  I'd like to subscribe to the Vertias Today newsletter for updates and new content.
                 </label>
               </div>
 
@@ -247,14 +247,14 @@ export default function ContactPage() {
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-gray-700">
-              Quick answers to common questions about X Times.
+              Quick answers to common questions about Vertias Today.
             </p>
           </div>
           
           <div className="space-y-6">
             {[
               {
-                question: "How do I submit an article to X Times?",
+                question: "How do I submit an article to Vertias Today?",
                 answer: "You can submit articles through our submission page. Fill out the form with your article details and upload your manuscript. Our editorial team will review it within 1-2 weeks."
               },
               {

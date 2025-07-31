@@ -72,44 +72,44 @@ export const podcasts: Podcast[] = [];
 export const teamMembers: TeamMember[] = [
   {
     id: '1',
-    name: 'Mehmet Arda Gün',
-    username: 'mehmet.arda.gun',
-    role: 'Editor-in-Chief & Founder',
-    bio: 'Student at Ruzgar Science School and founder of XTimes. A passionate young entrepreneur in academic publishing and student leadership. Driven by the vision of creating the Middle East\'s largest student-led academic journal. Specialized in STEM fields and focused on supporting youth academic development.',
-    avatar: '/avatars/mehmet-arda.jpg',
-    expertise: ['Academic Publishing', 'Student Leadership', 'Entrepreneurship', 'STEM', 'Project Management'],
+    name: 'Buse Altunbağ',
+    username: 'buse.altunbag',
+    role: 'Founder',
+    bio: 'Founder and chief editor of Vertias Today, a student-led journal amplifying youth perspectives across diverse fields. Personally focused on neuroscience and biology, with a strong commitment to women\'s rights and youth empowerment. Uses science communication as a platform to amplify underrepresented voices, oversees editorial strategy, curates impactful scientific content, and leads initiatives promoting equitable access to STEM education and awareness.',
+    avatar: '/avatars/buse-altunbag.jpg',
+    expertise: ['Academic Publishing', 'Student Leadership', 'Neuroscience', 'Biology', 'Women\'s Rights', 'Youth Empowerment'],
     social: {
-      twitter: 'https://twitter.com/mehmetardagun',
-      linkedin: 'https://linkedin.com/in/mehmetardagun',
-      email: 'mehmet.arda@xtimes.org'
+      twitter: 'https://twitter.com/busealtunbag',
+      linkedin: 'https://linkedin.com/in/busealtunbag',
+      email: 'buse.altunbag@veritastoday.org'
     }
   },
   {
     id: '2',
+    name: 'Mehmet Arda Gün',
+    username: 'mehmet.arda.gun',
+    role: 'Head of YouTube & Editor',
+    bio: 'Head of YouTube operations and editor for Vertias Today, a student-led journal amplifying youth perspectives. Also, a young entrepreneur with an interest in economics, leveraging digital media and creative strategies to expand youth-driven initiatives. Oversees video content strategy, editorial processes, and innovative projects that combine communication, business insight, and social impact.',
+    avatar: '/avatars/mehmet-arda.jpg',
+    expertise: ['Digital Media', 'Economics', 'Youth Engagement', 'Video Content Strategy', 'Editorial Processes'],
+    social: {
+      twitter: 'https://twitter.com/mehmetardagun',
+      linkedin: 'https://linkedin.com/in/mehmetardagun',
+      email: 'mehmet.arda@veritastoday.org'
+    }
+  },
+  {
+    id: '3',
     name: 'Rumet Asan',
     username: 'rumet.asan',
     role: 'Technology Editor & Website Developer',
-    bio: 'Student at Ruzgar Science School, specialized in web technologies and digital platform development. Manages XTimes\' technology-focused content and actively participates in website development processes. Strengthens the platform\'s technical infrastructure with deep knowledge in modern web technologies and user experience.',
+    bio: 'Student at Ruzgar Science School, specialized in web technologies and digital platform development. Manages Vertias Today\'s technology-focused content and actively participates in website development processes. Strengthens the platform\'s technical infrastructure with deep knowledge in modern web technologies and user experience.',
     avatar: '/avatars/rumet-asan.jpg',
     expertise: ['Web Technologies', 'Website Development', 'Digital Platform', 'User Experience'],
     social: {
       twitter: 'https://twitter.com/rumetasan',
       linkedin: 'https://linkedin.com/in/rumetasan',
-      email: 'rumet.asan@xtimes.org'
-    }
-  },
-  {
-    id: '3',
-    name: 'Buse Altunbağ',
-    username: 'buse.altunbag',
-    role: 'Content Director & Social Media Manager',
-    bio: 'Student at Ruzgar Science School, specialized in content management and social media strategies. Manages XTimes\' social media presence and focuses on improving content quality. Experienced in user engagement and community building.',
-    avatar: '/avatars/buse-altunbag.jpg',
-    expertise: ['Content Management', 'Social Media', 'Community Management', 'Digital Marketing'],
-    social: {
-      twitter: 'https://twitter.com/busealtunbag',
-      linkedin: 'https://linkedin.com/in/busealtunbag',
-      email: 'buse.altunbag@xtimes.org'
+      email: 'rumet.asan@veritastoday.org'
     }
   }
 ];

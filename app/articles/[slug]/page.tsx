@@ -83,7 +83,7 @@ export default function ArticleDetailPage() {
       {/* Back Button */}
       <div className="bg-white border-b">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link
+          <Link 
             href="/articles"
             className="inline-flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors duration-200"
           >
@@ -123,9 +123,9 @@ export default function ArticleDetailPage() {
             <div className="flex items-center space-x-2">
               <User className="w-4 h-4" />
               <span>{authorName}</span>
-            </div>
+                  </div>
             <div className="flex items-center space-x-2">
-              <Calendar className="w-4 h-4" />
+                  <Calendar className="w-4 h-4" />
               <span>
                 {article.publishedAt ? 
                   new Date(article.publishedAt).toLocaleDateString('en-US', {
@@ -137,7 +137,7 @@ export default function ArticleDetailPage() {
                 }
               </span>
             </div>
-            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
               <Eye className="w-4 h-4" />
               <span>{article.views || 0} views</span>
             </div>

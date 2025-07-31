@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { User, Mail, Calendar, Edit, LogOut, Settings, Shield, Upload, X } from 'lucide-react';
+import { User, Mail, Calendar, Edit, LogOut, Settings, Shield, Upload, X, Camera } from 'lucide-react';
 import { uploadProfileImage } from '@/lib/firestore';
 import { updateUserProfile } from '@/lib/auth';
 
@@ -48,7 +48,7 @@ export default function ProfilePage() {
     if (file) {
       // Validate file type
       if (!file.type.startsWith('image/')) {
-        alert('Please select an image file');
+        alert('Please select an image file (JPEG, PNG, GIF, etc.)');
         return;
       }
       
@@ -70,18 +70,25 @@ export default function ProfilePage() {
   };
 
   const handleImageUpload = async () => {
-    if (!selectedFile || !user) return;
+    if (!selectedFile || !user) {
+      alert('Please select a file first');
+      return;
+    }
 
     try {
       setUploadingImage(true);
+      console.log('Uploading profile image for user:', user.uid);
+      
       const imageUrl = await uploadProfileImage(selectedFile, user.uid);
-      console.log('Profile image uploaded:', imageUrl);
+      console.log('Profile image uploaded successfully:', imageUrl);
       
       // Update user profile with new image URL
       await updateUserProfile(user.uid, { profileImage: imageUrl });
+      console.log('User profile updated with new image URL');
       
       // Refresh user profile to get updated data
       await refreshUserProfile();
+      console.log('User profile refreshed');
       
       setSelectedFile(null);
       setImagePreview(null);
@@ -170,9 +177,10 @@ export default function ProfilePage() {
                   {isEditing && (
                     <button
                       onClick={() => document.getElementById('profile-image-upload')?.click()}
-                      className="absolute -bottom-1 -right-1 bg-white text-primary rounded-full p-2 hover:bg-gray-100 transition-colors duration-200"
+                      className="absolute -bottom-1 -right-1 bg-white text-primary rounded-full p-2 hover:bg-gray-100 transition-colors duration-200 shadow-lg"
+                      title="Upload profile image"
                     >
-                      <Upload className="w-4 h-4" />
+                      <Camera className="w-4 h-4" />
                     </button>
                   )}
                   <input
@@ -200,6 +208,7 @@ export default function ProfilePage() {
                 <button
                   onClick={() => setIsEditing(!isEditing)}
                   className="bg-white bg-opacity-20 hover:bg-opacity-30 p-3 rounded-lg transition-colors duration-200"
+                  title={isEditing ? 'Cancel editing' : 'Edit profile'}
                 >
                   <Edit className="w-5 h-5" />
                 </button>
@@ -213,11 +222,12 @@ export default function ProfilePage() {
                   {/* Profile Image Upload */}
                   {selectedFile && (
                     <div className="space-y-4">
-                      <div className="relative">
-                        <img src={imagePreview!} alt="Preview" className="w-32 h-32 object-cover rounded-full"/>
+                      <div className="relative inline-block">
+                        <img src={imagePreview!} alt="Preview" className="w-32 h-32 object-cover rounded-full border-4 border-gray-200"/>
                         <button
                           onClick={clearFileSelection}
-                          className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                          className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors duration-200"
+                          title="Remove selected image"
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -225,9 +235,10 @@ export default function ProfilePage() {
                       <button
                         onClick={handleImageUpload}
                         disabled={uploadingImage}
-                        className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors duration-200 disabled:opacity-50"
+                        className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
                       >
-                        {uploadingImage ? 'Uploading...' : 'Upload Profile Image'}
+                        <Upload className="w-4 h-4" />
+                        <span>{uploadingImage ? 'Uploading...' : 'Upload Profile Image'}</span>
                       </button>
                     </div>
                   )}
@@ -241,6 +252,7 @@ export default function ProfilePage() {
                       value={formData.displayName}
                       onChange={(e) => handleInputChange('displayName', e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="Enter your display name"
                     />
                   </div>
                   
@@ -253,6 +265,7 @@ export default function ProfilePage() {
                       value={formData.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="Enter your email"
                     />
                   </div>
                   
@@ -265,6 +278,7 @@ export default function ProfilePage() {
                       onChange={(e) => handleInputChange('bio', e.target.value)}
                       rows={4}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="Tell us about yourself..."
                     />
                   </div>
                   
@@ -276,7 +290,10 @@ export default function ProfilePage() {
                       Save Changes
                     </button>
                     <button
-                      onClick={() => setIsEditing(false)}
+                      onClick={() => {
+                        setIsEditing(false);
+                        clearFileSelection();
+                      }}
                       className="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors duration-200"
                     >
                       Cancel
@@ -308,9 +325,14 @@ export default function ProfilePage() {
                   </div>
                   
                   {userProfile?.bio && (
-                    <div>
-                      <p className="text-sm text-gray-500 mb-2">Bio</p>
-                      <p className="text-gray-700">{userProfile.bio}</p>
+                    <div className="flex items-start space-x-4">
+                      <div className="w-12 h-12 bg-primary-light rounded-lg flex items-center justify-center">
+                        <Calendar className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-500">Bio</p>
+                        <p className="font-semibold">{userProfile.bio}</p>
+                      </div>
                     </div>
                   )}
                   
@@ -321,8 +343,8 @@ export default function ProfilePage() {
                     <div>
                       <p className="text-sm text-gray-500">Member Since</p>
                       <p className="font-semibold">
-                        {user.metadata?.creationTime ? 
-                          new Date(user.metadata.creationTime).toLocaleDateString() : 
+                        {userProfile?.createdAt ? 
+                          new Date(userProfile.createdAt).toLocaleDateString() : 
                           'Unknown'
                         }
                       </p>

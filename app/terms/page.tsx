@@ -9,7 +9,7 @@ export default function TermsOfServicePage() {
       title: 'Acceptance of Terms',
       icon: CheckCircle,
       content: [
-        'By accessing and using X Times, you accept and agree to be bound by these terms',
+        'By accessing and using Vertias Today, you accept and agree to be bound by these terms',
         'These terms apply to all users, contributors, and visitors',
         'We reserve the right to modify these terms at any time',
         'Continued use constitutes acceptance of updated terms'
@@ -42,7 +42,7 @@ export default function TermsOfServicePage() {
       icon: Shield,
       content: [
         'Authors retain copyright of their original work',
-        'X Times receives non-exclusive publication rights',
+        'Vertias Today receives non-exclusive publication rights',
         'Proper attribution required for all content',
         'Respect for third-party intellectual property',
         'License agreements for published content'
@@ -96,7 +96,7 @@ export default function TermsOfServicePage() {
               Terms of Service
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              The terms and conditions governing your use of X Times academic platform.
+              The terms and conditions governing your use of Vertias Today academic platform.
             </p>
             <div className="mt-6 text-sm text-gray-500">
               <p>Effective date: {new Date().toLocaleDateString()}</p>
@@ -168,7 +168,7 @@ export default function TermsOfServicePage() {
             <h2 className="text-3xl font-bold mb-6 text-center">Limitation of Liability</h2>
             <div className="space-y-4 text-white/90">
               <p>
-                X Times provides this platform "as is" and makes no warranties about the accuracy, 
+                Vertias Today provides this platform "as is" and makes no warranties about the accuracy, 
                 completeness, or reliability of any content or services.
               </p>
               <p>

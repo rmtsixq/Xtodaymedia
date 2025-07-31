@@ -50,11 +50,11 @@ const Footer = () => {
   ];
 
   const socialLinks = [
-    { name: 'Twitter', icon: Twitter, href: 'https://twitter.com/xtimes', color: 'hover:text-blue-400' },
-    { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com/company/xtimes', color: 'hover:text-blue-600' },
-    { name: 'YouTube', icon: Youtube, href: 'https://youtube.com/@xtimes', color: 'hover:text-red-500' },
-    { name: 'Instagram', icon: Instagram, href: 'https://instagram.com/xtimes', color: 'hover:text-pink-500' },
-    { name: 'Email', icon: Mail, href: 'mailto:editorial@xtimes.org', color: 'hover:text-primary' }
+    { name: 'Twitter', icon: Twitter, href: 'https://twitter.com/veritastoday', color: 'hover:text-blue-400' },
+    { name: 'LinkedIn', icon: Linkedin, href: 'https://linkedin.com/company/veritastoday', color: 'hover:text-blue-600' },
+    { name: 'YouTube', icon: Youtube, href: 'https://youtube.com/@veritastoday', color: 'hover:text-red-500' },
+    { name: 'Instagram', icon: Instagram, href: 'https://instagram.com/veritastoday', color: 'hover:text-pink-500' },
+    { name: 'Email', icon: Mail, href: 'mailto:editorial@veritastoday.org', color: 'hover:text-primary' }
   ];
 
   // Makale sayısını yükle
@@ -141,12 +141,12 @@ const Footer = () => {
           {/* Logo and Description */}
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center space-x-3 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">X</span>
+              <div className="w-12 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center overflow-hidden p-2">
+                <img src="/logo.png" alt="Vertias Today" className="w-full h-full object-contain" />
               </div>
               <div>
                 <span className="text-3xl font-serif font-bold text-white">
-                  X Times
+                  Vertias Today
                 </span>
                 <div className="text-xs text-gray-400 -mt-1">Academic Journal</div>
               </div>
@@ -200,7 +200,7 @@ const Footer = () => {
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} X Times. All rights reserved. Made with ❤️ for the academic community.
+              © {currentYear} Vertias Today. All rights reserved. Made with ❤️ for the academic community.
             </div>
             <div className="flex flex-wrap justify-center md:justify-end space-x-6 text-sm">
               <Link
