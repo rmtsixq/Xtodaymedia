@@ -226,6 +226,15 @@ export default function NewVideoPage() {
                     type="submit"
                     disabled={submitting || !formData.title || !formData.description || !formData.youtubeUrl || !youtubeId}
                     className="flex items-center space-x-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50"
+                    onClick={() => {
+                      console.log('Form validation:', {
+                        submitting,
+                        title: formData.title,
+                        description: formData.description,
+                        youtubeUrl: formData.youtubeUrl,
+                        youtubeId
+                      });
+                    }}
                   >
                     {submitting ? (
                       <>
