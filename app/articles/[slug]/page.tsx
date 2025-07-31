@@ -6,6 +6,7 @@ import { ArrowLeft, Calendar, User, Eye, Share2, Bookmark, Heart } from 'lucide-
 import Link from 'next/link';
 import { getArticleBySlug } from '@/lib/firestore';
 import { FirebaseArticle } from '@/lib/firestore';
+import ArticleContent from '@/components/ArticleContent';
 
 export default function ArticleDetailPage() {
   const params = useParams();
@@ -177,25 +178,7 @@ export default function ArticleDetailPage() {
       {/* Article Content */}
       <section className="bg-white py-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="prose prose-lg max-w-none">
-            <div className="text-gray-700 leading-relaxed text-lg">
-              {article.content ? (
-                <div dangerouslySetInnerHTML={{ __html: article.content }} />
-              ) : (
-                <div className="space-y-6">
-                  <p>
-                    This is a placeholder for the article content. The full article content would be displayed here.
-                  </p>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                  </p>
-                  <p>
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
+          <ArticleContent content={article.content || ''} />
         </div>
       </section>
 

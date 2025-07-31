@@ -289,7 +289,7 @@ export default function ArticlesManagementPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex items-center space-x-2">
                           <Link
-                            href={`/admin/articles/edit/${article.id}`}
+                            href={`/admin/articles/${article.id}/edit`}
                             className="text-blue-600 hover:text-blue-900"
                           >
                             <Edit className="w-4 h-4" />

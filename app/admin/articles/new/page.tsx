@@ -6,7 +6,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { createArticle, createSlug, getAllUsers } from '@/lib/firestore';
 import { uploadImage } from '@/lib/firestore';
 import { categories } from '@/lib/data';
-import { ArrowLeft, Save, Eye, EyeOff, Upload, X } from 'lucide-react';
+import { ArrowLeft, Save, Eye, EyeOff, Upload, X, AlertCircle } from 'lucide-react';
+import ArticleEditor from '@/components/ArticleEditor';
 
 export default function NewArticlePage() {
   const { user, isAdmin, loading } = useAuth();
@@ -285,14 +286,14 @@ export default function NewArticlePage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Content *
                   </label>
-                  <textarea
-                    required
-                    rows={15}
+                  <ArticleEditor
                     value={formData.content}
-                    onChange={(e) => handleInputChange('content', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent font-mono text-sm text-red-800 placeholder-red-400"
-                    placeholder="Enter article content (Markdown supported)"
+                    onChange={(value) => handleInputChange('content', value)}
+                    placeholder="Enter article content..."
                   />
+                  <p className="text-xs text-gray-500 mt-2">
+                    HTML tags are supported. Use the toolbar buttons for easy formatting.
+                  </p>
                 </div>
 
                 {/* Category */}
