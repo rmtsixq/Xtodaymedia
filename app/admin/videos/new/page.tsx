@@ -54,7 +54,9 @@ export default function NewVideoPage() {
     setSubmitting(true);
     setError('');
 
-    if (!youtubeId) {
+    // YouTube ID'yi tekrar kontrol et
+    const extractedId = extractYouTubeId(formData.youtubeUrl);
+    if (!extractedId) {
       setError('Invalid YouTube URL');
       setSubmitting(false);
       return;
@@ -71,9 +73,11 @@ export default function NewVideoPage() {
         createdBy: user?.uid || ''
       };
 
+      console.log('Creating video with data:', videoData);
       await createVideo(videoData);
       router.push('/admin');
     } catch (error: any) {
+      console.error('Video creation error:', error);
       setError(error.message || 'An error occurred while creating the video');
     } finally {
       setSubmitting(false);
@@ -224,17 +228,8 @@ export default function NewVideoPage() {
                   </button>
                   <button
                     type="submit"
-                    disabled={submitting || !formData.title || !formData.description || !formData.youtubeUrl || !youtubeId}
+                    disabled={submitting || !formData.title || !formData.description || !formData.youtubeUrl}
                     className="flex items-center space-x-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50"
-                    onClick={() => {
-                      console.log('Form validation:', {
-                        submitting,
-                        title: formData.title,
-                        description: formData.description,
-                        youtubeUrl: formData.youtubeUrl,
-                        youtubeId
-                      });
-                    }}
                   >
                     {submitting ? (
                       <>
