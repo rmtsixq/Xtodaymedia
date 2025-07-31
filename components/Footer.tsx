@@ -142,7 +142,7 @@ const Footer = () => {
           <div className="lg:col-span-2">
             <Link href="/" className="inline-flex items-center space-x-3 mb-6">
               <div className="w-12 h-10 bg-gradient-to-br from-primary to-primary-dark rounded-lg flex items-center justify-center overflow-hidden p-2">
-                <img src="/logo.png" alt="Vertias Today" className="w-full h-full object-contain" />
+                <img src="/Logo.png" alt="Vertias Today" className="w-full h-full object-contain" />
               </div>
               <div>
                 <span className="text-3xl font-serif font-bold text-white">

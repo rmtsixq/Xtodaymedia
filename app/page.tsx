@@ -72,7 +72,7 @@ export default function HomePage() {
         {/* Logo Background */}
         <div className="absolute inset-0 flex items-center justify-center opacity-15">
           <img 
-            src="/logo.png" 
+            src="/Logo.png" 
             alt="Vertias Today Background Logo" 
             className="w-[500px] h-[500px] md:w-[600px] md:h-[600px] lg:w-[700px] lg:h-[700px] object-contain"
           />

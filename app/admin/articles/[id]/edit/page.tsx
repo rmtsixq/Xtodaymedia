@@ -6,8 +6,9 @@ import { useAuth } from '@/contexts/AuthContext';
 import { getArticleById, updateArticle, createSlug, getAllUsers } from '@/lib/firestore';
 import { uploadImage } from '@/lib/firestore';
 import { categories } from '@/lib/data';
-import { ArrowLeft, Save, Eye, EyeOff, Upload, X } from 'lucide-react';
+import { ArrowLeft, Save, Eye, EyeOff, Upload, X, AlertCircle } from 'lucide-react';
 import { FirebaseArticle } from '@/lib/firestore';
+import ArticleEditor from '@/components/ArticleEditor';
 
 export default function EditArticlePage() {
   const { user, isAdmin, loading } = useAuth();
@@ -30,6 +31,7 @@ export default function EditArticlePage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [showPreview, setShowPreview] = useState(false);
   const [loadingArticle, setLoadingArticle] = useState(true);
   
@@ -58,6 +60,7 @@ export default function EditArticlePage() {
         setAuthors(users);
       } catch (error) {
         console.error('Kullanıcılar yüklenirken hata:', error);
+        setError('Kullanıcılar yüklenirken bir hata oluştu');
       } finally {
         setLoadingAuthors(false);
       }
@@ -88,10 +91,12 @@ export default function EditArticlePage() {
             featuredImage: article.featuredImage || '',
             status: (article.status === 'archived' ? 'draft' : article.status) || 'draft',
             isEditorsPick: article.isEditorsPick || false,
-                         author: typeof article.author === 'string' ? article.author : 
-               (article.author && typeof article.author === 'object' && 'name' in article.author) ? 
-               (article.author as any).name : ''
+            author: typeof article.author === 'string' ? article.author : 
+              (article.author && typeof article.author === 'object' && 'name' in article.author) ? 
+              (article.author as any).name : ''
           });
+        } else {
+          setError('Makale bulunamadı');
         }
       } catch (error) {
         console.error('Makale yüklenirken hata:', error);
@@ -120,16 +125,33 @@ export default function EditArticlePage() {
     e.preventDefault();
     setSubmitting(true);
     setError('');
+    setSuccess('');
 
     try {
+      // Form validasyonu
+      if (!formData.title.trim()) {
+        setError('Başlık gereklidir');
+        return;
+      }
+
+      if (!formData.excerpt.trim()) {
+        setError('Özet gereklidir');
+        return;
+      }
+
+      if (!formData.content.trim()) {
+        setError('İçerik gereklidir');
+        return;
+      }
+
       const selectedAuthor = authors.find(a => a.uid === formData.author);
       
       const articleData = {
-        title: formData.title,
+        title: formData.title.trim(),
         slug: createSlug(formData.title),
-        excerpt: formData.excerpt,
-        content: formData.content,
-        author: selectedAuthor?.displayName || 'Admin',
+        excerpt: formData.excerpt.trim(),
+        content: formData.content.trim(),
+        author: selectedAuthor?.displayName || formData.author || 'Admin',
         category: formData.customCategory || formData.category,
         tags: formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag),
         featuredImage: formData.featuredImage || '/images/default-article.jpg',
@@ -139,7 +161,12 @@ export default function EditArticlePage() {
       };
 
       await updateArticle(articleId, articleData);
-      router.push('/admin/articles');
+      setSuccess('Makale başarıyla güncellendi!');
+      
+      // 2 saniye sonra listeye dön
+      setTimeout(() => {
+        router.push('/admin/articles');
+      }, 2000);
     } catch (error: any) {
       console.error('Makale güncelleme hatası:', error);
       setError(error.message || 'Makale güncellenirken bir hata oluştu');
@@ -222,7 +249,7 @@ export default function EditArticlePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => router.back()}
+                onClick={() => router.push('/admin/articles')}
                 className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
               >
                 <ArrowLeft className="w-5 h-5" />
@@ -252,8 +279,16 @@ export default function EditArticlePage() {
           <div className="lg:col-span-2">
             <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow p-6">
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6">
+                <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 flex items-center">
+                  <AlertCircle className="w-5 h-5 mr-2" />
                   {error}
+                </div>
+              )}
+
+              {success && (
+                <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg mb-6 flex items-center">
+                  <AlertCircle className="w-5 h-5 mr-2" />
+                  {success}
                 </div>
               )}
 
@@ -268,7 +303,7 @@ export default function EditArticlePage() {
                     required
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800 placeholder-gray-400"
                     placeholder="Makale başlığını girin"
                   />
                 </div>
@@ -278,20 +313,20 @@ export default function EditArticlePage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Yazar *
                   </label>
-                                     <select
-                     required
-                     value={formData.author}
-                     onChange={(e) => handleInputChange('author', e.target.value)}
-                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800"
-                     disabled={loadingAuthors}
-                   >
-                     <option value="">{loadingAuthors ? 'Yükleniyor...' : 'Yazar seçin'}</option>
-                     {authors.map(author => (
-                       <option key={author.uid} value={author.uid}>
-                         {author.displayName} ({author.email})
-                       </option>
-                     ))}
-                   </select>
+                  <select
+                    required
+                    value={formData.author}
+                    onChange={(e) => handleInputChange('author', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800"
+                    disabled={loadingAuthors}
+                  >
+                    <option value="">{loadingAuthors ? 'Yükleniyor...' : 'Yazar seçin'}</option>
+                    {authors.map(author => (
+                      <option key={author.uid} value={author.uid}>
+                        {author.displayName} ({author.email})
+                      </option>
+                    ))}
+                  </select>
                 </div>
 
                 {/* Excerpt */}
@@ -304,7 +339,7 @@ export default function EditArticlePage() {
                     rows={3}
                     value={formData.excerpt}
                     onChange={(e) => handleInputChange('excerpt', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800 placeholder-gray-400"
                     placeholder="Makale özetini girin"
                   />
                 </div>
@@ -314,14 +349,14 @@ export default function EditArticlePage() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     İçerik *
                   </label>
-                  <textarea
-                    required
-                    rows={15}
+                  <ArticleEditor
                     value={formData.content}
-                    onChange={(e) => handleInputChange('content', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent font-mono text-sm text-red-800 placeholder-red-400"
-                    placeholder="Makale içeriğini girin (Markdown desteklenir)"
+                    onChange={(value) => handleInputChange('content', value)}
+                    placeholder="Makale içeriğini girin..."
                   />
+                  <p className="text-xs text-gray-500 mt-2">
+                    HTML etiketleri kullanabilirsiniz. Toolbar'daki butonları kullanarak kolayca formatlama yapabilirsiniz.
+                  </p>
                 </div>
 
                 {/* Category */}
@@ -332,7 +367,7 @@ export default function EditArticlePage() {
                   <select
                     value={formData.category}
                     onChange={(e) => handleInputChange('category', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800"
                   >
                     <option value="">Kategori seçin</option>
                     {categories.map(category => (
@@ -350,7 +385,7 @@ export default function EditArticlePage() {
                     type="text"
                     value={formData.customCategory}
                     onChange={(e) => handleInputChange('customCategory', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800 placeholder-gray-400"
                     placeholder="Özel kategori adı (opsiyonel)"
                   />
                 </div>
@@ -364,7 +399,7 @@ export default function EditArticlePage() {
                     type="text"
                     value={formData.tags}
                     onChange={(e) => handleInputChange('tags', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800 placeholder-gray-400"
                     placeholder="Etiketleri virgülle ayırın (örn: teknoloji, bilim, AI)"
                   />
                 </div>
@@ -461,7 +496,7 @@ export default function EditArticlePage() {
                       type="url"
                       value={formData.featuredImage}
                       onChange={(e) => handleInputChange('featuredImage', e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800 placeholder-red-400"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800 placeholder-gray-400"
                       placeholder="https://example.com/image.jpg"
                     />
                   </div>
@@ -471,7 +506,7 @@ export default function EditArticlePage() {
                 <div className="flex items-center justify-end space-x-4 pt-6 border-t">
                   <button
                     type="button"
-                    onClick={() => router.back()}
+                    onClick={() => router.push('/admin/articles')}
                     className="px-6 py-3 text-gray-700 hover:text-gray-900 transition-colors"
                   >
                     İptal
@@ -513,7 +548,7 @@ export default function EditArticlePage() {
                   <select
                     value={formData.status}
                     onChange={(e) => handleInputChange('status', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-gray-800"
                   >
                     <option value="draft">Taslak</option>
                     <option value="published">Yayınla</option>
@@ -544,7 +579,7 @@ export default function EditArticlePage() {
                   <h2 className="text-xl font-bold">{formData.title || 'Başlık'}</h2>
                   <p className="text-gray-600">{formData.excerpt || 'Özet'}</p>
                   <div className="mt-4 text-sm text-gray-500">
-                                         <p>Yazar: {authors.find(a => a.uid === formData.author)?.displayName || 'Belirtilmemiş'}</p>
+                    <p>Yazar: {authors.find(a => a.uid === formData.author)?.displayName || 'Belirtilmemiş'}</p>
                     <p>Kategori: {formData.customCategory || formData.category || 'Belirtilmemiş'}</p>
                     <p>Etiketler: {formData.tags || 'Yok'}</p>
                     <p>Durum: {formData.status === 'published' ? 'Yayınlanacak' : 'Taslak'}</p>
