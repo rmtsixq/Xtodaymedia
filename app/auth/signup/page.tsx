@@ -23,13 +23,13 @@ export default function SignupPage() {
     setError('');
 
     if (password !== confirmPassword) {
-      setError('Şifreler eşleşmiyor');
+      setError('Passwords do not match');
       setLoading(false);
       return;
     }
 
     if (password.length < 6) {
-      setError('Şifre en az 6 karakter olmalıdır');
+      setError('Password must be at least 6 characters');
       setLoading(false);
       return;
     }
@@ -38,7 +38,7 @@ export default function SignupPage() {
       await signUp(email, password, displayName);
       router.push('/');
     } catch (error: any) {
-      setError(error.message || 'Kayıt olurken bir hata oluştu');
+      setError(error.message || 'An error occurred while signing up');
     } finally {
       setLoading(false);
     }
@@ -52,12 +52,12 @@ export default function SignupPage() {
             <UserPlus className="h-6 w-6 text-white" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-serif font-bold text-gray-900">
-            Hesap oluşturun
+            Create an account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Zaten hesabınız var mı?{' '}
+            Already have an account?{' '}
             <Link href="/auth/login" className="font-medium text-primary hover:text-primary-dark">
-              Giriş yapın
+              Sign in
             </Link>
           </p>
         </div>
@@ -72,7 +72,7 @@ export default function SignupPage() {
           <div className="space-y-4">
             <div>
               <label htmlFor="displayName" className="block text-sm font-medium text-gray-700">
-                Ad Soyad
+                Full Name
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -87,14 +87,14 @@ export default function SignupPage() {
                   value={displayName}
                   onChange={(e) => setDisplayName(e.target.value)}
                   className="appearance-none relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Ad ve soyadınızı girin"
+                  placeholder="Enter your full name"
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                E-posta adresi
+                Email address
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -109,14 +109,14 @@ export default function SignupPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="E-posta adresinizi girin"
+                  placeholder="Enter your email address"
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Şifre
+                Password
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -131,7 +131,7 @@ export default function SignupPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none relative block w-full pl-10 pr-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Şifrenizi girin (en az 6 karakter)"
+                  placeholder="Enter your password (at least 6 characters)"
                 />
                 <button
                   type="button"
@@ -149,7 +149,7 @@ export default function SignupPage() {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Şifre Tekrarı
+                Confirm Password
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -164,7 +164,7 @@ export default function SignupPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="appearance-none relative block w-full pl-10 pr-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Şifrenizi tekrar girin"
+                  placeholder="Confirm your password"
                 />
                 <button
                   type="button"
@@ -193,19 +193,15 @@ export default function SignupPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Hesap oluşturuluyor...
+                  Creating account...
                 </span>
               ) : (
-                'Hesap Oluştur'
+                'Create Account'
               )}
             </button>
           </div>
 
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              <code className="bg-yellow-100 px-2 py-1 rounded">admin@xtimes.org</code> ile kayıt olursanız admin olursunuz
-            </p>
-          </div>
+
         </form>
       </div>
     </div>

@@ -4,11 +4,7 @@ export interface Article {
   slug: string;
   excerpt: string;
   content: string;
-  author: {
-    name: string;
-    username: string;
-    avatar: string;
-  };
+  author: string;
   category: string;
   tags: string[];
   publishedAt: string;
@@ -76,44 +72,44 @@ export const podcasts: Podcast[] = [];
 export const teamMembers: TeamMember[] = [
   {
     id: '1',
-    name: 'Dr. Sarah Johnson',
-    username: 'sarah.johnson',
-    role: 'Editor-in-Chief',
-    bio: 'Leading our editorial vision with over 10 years of experience in academic publishing and cultural studies.',
-    avatar: '/avatars/sarah.jpg',
-    expertise: ['Cultural Studies', 'Academic Writing', 'Editorial Leadership'],
+    name: 'Mehmet Arda Gün',
+    username: 'mehmet.arda.gun',
+    role: 'Editor-in-Chief & Founder',
+    bio: 'Student at Ruzgar Science School and founder of XTimes. A passionate young entrepreneur in academic publishing and student leadership. Driven by the vision of creating the Middle East\'s largest student-led academic journal. Specialized in STEM fields and focused on supporting youth academic development.',
+    avatar: '/avatars/mehmet-arda.jpg',
+    expertise: ['Academic Publishing', 'Student Leadership', 'Entrepreneurship', 'STEM', 'Project Management'],
     social: {
-      twitter: 'https://twitter.com/sarahjohnson',
-      linkedin: 'https://linkedin.com/in/sarahjohnson',
-      email: 'sarah.johnson@xtimes.org'
+      twitter: 'https://twitter.com/mehmetardagun',
+      linkedin: 'https://linkedin.com/in/mehmetardagun',
+      email: 'mehmet.arda@xtimes.org'
     }
   },
   {
     id: '2',
-    name: 'Prof. Michael Chen',
-    username: 'michael.chen',
-    role: 'Senior Editor',
-    bio: 'Environmental policy expert with a passion for sustainability and interdisciplinary research.',
-    avatar: '/avatars/michael.jpg',
-    expertise: ['Environmental Policy', 'Sustainability', 'Policy Analysis'],
+    name: 'Rumet Asan',
+    username: 'rumet.asan',
+    role: 'Technology Editor & Website Developer',
+    bio: 'Student at Ruzgar Science School, specialized in web technologies and digital platform development. Manages XTimes\' technology-focused content and actively participates in website development processes. Strengthens the platform\'s technical infrastructure with deep knowledge in modern web technologies and user experience.',
+    avatar: '/avatars/rumet-asan.jpg',
+    expertise: ['Web Technologies', 'Website Development', 'Digital Platform', 'User Experience'],
     social: {
-      twitter: 'https://twitter.com/michaelchen',
-      linkedin: 'https://linkedin.com/in/michaelchen',
-      email: 'michael.chen@xtimes.org'
+      twitter: 'https://twitter.com/rumetasan',
+      linkedin: 'https://linkedin.com/in/rumetasan',
+      email: 'rumet.asan@xtimes.org'
     }
   },
   {
     id: '3',
-    name: 'Dr. Emily Rodriguez',
-    username: 'emily.rodriguez',
-    role: 'Technology Editor',
-    bio: 'AI ethics researcher and digital innovation specialist focused on responsible technology development.',
-    avatar: '/avatars/emily.jpg',
-    expertise: ['AI Ethics', 'Digital Innovation', 'Technology Policy'],
+    name: 'Buse Altunbağ',
+    username: 'buse.altunbag',
+    role: 'Content Director & Social Media Manager',
+    bio: 'Student at Ruzgar Science School, specialized in content management and social media strategies. Manages XTimes\' social media presence and focuses on improving content quality. Experienced in user engagement and community building.',
+    avatar: '/avatars/buse-altunbag.jpg',
+    expertise: ['Content Management', 'Social Media', 'Community Management', 'Digital Marketing'],
     social: {
-      twitter: 'https://twitter.com/emilyrodriguez',
-      linkedin: 'https://linkedin.com/in/emilyrodriguez',
-      email: 'emily.rodriguez@xtimes.org'
+      twitter: 'https://twitter.com/busealtunbag',
+      linkedin: 'https://linkedin.com/in/busealtunbag',
+      email: 'buse.altunbag@xtimes.org'
     }
   }
 ];

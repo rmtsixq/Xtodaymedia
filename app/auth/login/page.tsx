@@ -23,7 +23,7 @@ export default function LoginPage() {
       await signIn(email, password);
       router.push('/');
     } catch (error: any) {
-      setError(error.message || 'Giriş yaparken bir hata oluştu');
+      setError(error.message || 'An error occurred while signing in');
     } finally {
       setLoading(false);
     }
@@ -37,12 +37,12 @@ export default function LoginPage() {
             <LogIn className="h-6 w-6 text-white" />
           </div>
           <h2 className="mt-6 text-center text-3xl font-serif font-bold text-gray-900">
-            Hesabınıza giriş yapın
+            Sign in to your account
           </h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Hesabınız yok mu?{' '}
+            Don't have an account?{' '}
             <Link href="/auth/signup" className="font-medium text-primary hover:text-primary-dark">
-              Kayıt olun
+              Sign up
             </Link>
           </p>
         </div>
@@ -57,7 +57,7 @@ export default function LoginPage() {
           <div className="space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                E-posta adresi
+                Email address
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -72,14 +72,14 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="appearance-none relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="E-posta adresinizi girin"
+                  placeholder="Enter your email address"
                 />
               </div>
             </div>
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Şifre
+                Password
               </label>
               <div className="mt-1 relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -94,7 +94,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="appearance-none relative block w-full pl-10 pr-10 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Şifrenizi girin"
+                  placeholder="Enter your password"
                 />
                 <button
                   type="button"
@@ -123,19 +123,15 @@ export default function LoginPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Giriş yapılıyor...
+                  Signing in...
                 </span>
               ) : (
-                'Giriş Yap'
+                'Sign In'
               )}
             </button>
           </div>
 
-          <div className="text-center">
-            <p className="text-sm text-gray-600">
-              Admin hesabı: <code className="bg-gray-100 px-2 py-1 rounded">admin@xtimes.org</code>
-            </p>
-          </div>
+
         </form>
       </div>
     </div>

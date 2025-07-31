@@ -41,9 +41,13 @@ export default function ArticlesPage() {
 
   const filteredAndSortedArticles = useMemo(() => {
     let filtered = articles.filter(article => {
+      const authorName = typeof article.author === 'string' ? article.author : 
+        (article.author && typeof article.author === 'object' && 'name' in article.author) ? 
+        (article.author as any).name : 'Unknown Author';
+      
       const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            article.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           article.author.toLowerCase().includes(searchTerm.toLowerCase());
+                           authorName.toLowerCase().includes(searchTerm.toLowerCase());
       
       const matchesCategory = selectedCategory === 'All' || article.category === selectedCategory;
       
@@ -118,7 +122,7 @@ export default function ArticlesPage() {
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800"
               >
                 <option value="All">All Categories</option>
                 {categories.map(category => (
@@ -130,7 +134,7 @@ export default function ArticlesPage() {
               <select
                 value={selectedFilter}
                 onChange={(e) => setSelectedFilter(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800"
               >
                 <option value="All">All Articles</option>
                 <option value="Editor's Pick">Editor's Pick</option>
@@ -140,7 +144,7 @@ export default function ArticlesPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-red-800"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>

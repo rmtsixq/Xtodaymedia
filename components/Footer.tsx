@@ -1,9 +1,14 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Mail, Twitter, Linkedin, Youtube, Instagram, Star, Award, Users, Send } from 'lucide-react';
+import { getPublishedArticles } from '@/lib/firestore';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const [articleCount, setArticleCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const footerSections = [
     {
@@ -52,8 +57,24 @@ const Footer = () => {
     { name: 'Email', icon: Mail, href: 'mailto:editorial@xtimes.org', color: 'hover:text-primary' }
   ];
 
+  // Makale sayısını yükle
+  useEffect(() => {
+    const fetchArticleCount = async () => {
+      try {
+        const articles = await getPublishedArticles();
+        setArticleCount(articles.length);
+      } catch (error) {
+        console.error('Makale sayısı yüklenirken hata:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchArticleCount();
+  }, []);
+
   const stats = [
-    { icon: Star, label: 'Published Articles', value: 'Dynamic' },
+    { icon: Star, label: 'Published Articles', value: loading ? '...' : articleCount.toString() },
     { icon: Award, label: 'Years of Excellence', value: '1+' },
     { icon: Users, label: 'Active Contributors', value: '20+' }
   ];
