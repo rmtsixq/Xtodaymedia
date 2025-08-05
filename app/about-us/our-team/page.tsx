@@ -8,35 +8,26 @@ import { teamMembers } from '@/lib/data';
 const extendedTeamData = [
   {
     ...teamMembers[0],
-    university: 'Columbia University',
-    graduationYear: '2018',
-    articlesPublished: 25,
-    joinedDate: '2021',
-    specialization: 'Cultural Studies & Academic Writing'
+    university: 'Ruzgar Science School',
+    specialization: 'Academic Publishing & Student Leadership'
   },
   {
     ...teamMembers[1],
-    university: 'Stanford University',
-    graduationYear: '2016',
-    articlesPublished: 18,
-    joinedDate: '2021',
-    specialization: 'Environmental Policy & Sustainability'
+    university: 'Ruzgar Science School',
+    specialization: 'Digital Media, Economics & Youth Engagement'
   },
   {
     ...teamMembers[2],
-    university: 'MIT',
-    graduationYear: '2019',
-    articlesPublished: 22,
-    joinedDate: '2022',
-    specialization: 'AI Ethics & Digital Innovation'
+    university: 'Ruzgar Science School',
+    specialization: 'Web Technologies & Digital Platform'
   }
 ];
 
 const teamStats = [
-  { icon: Users, label: 'Active Team Members', value: '25+', color: 'text-blue-500' },
-  { icon: Globe, label: 'Countries Represented', value: '12', color: 'text-green-500' },
-  { icon: Star, label: 'Combined Publications', value: '200+', color: 'text-yellow-500' },
-  { icon: Award, label: 'Industry Awards', value: '8', color: 'text-purple-500' }
+  { icon: Users, label: 'Core Team Members', value: '3', color: 'text-blue-500' },
+  { icon: Globe, label: 'School', value: 'Ruzgar Science School', color: 'text-green-500' },
+  { icon: Star, label: 'Focus Area', value: 'Student Leadership', color: 'text-yellow-500' },
+  { icon: Award, label: 'Mission', value: 'Academic Excellence', color: 'text-purple-500' }
 ];
 
 
@@ -61,7 +52,7 @@ export default function OurTeamPage() {
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 leading-tight">
               The Minds Behind
-              <span className="block text-yellow-300">X Times</span>
+              <span className="block text-yellow-300">Vertias Today</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-4xl mx-auto mb-8">
@@ -93,7 +84,7 @@ export default function OurTeamPage() {
               Editorial Leadership
             </h2>
             <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              Meet the visionaries leading X Times toward excellence in academic journalism and student empowerment.
+              Meet the visionaries leading Vertias Today toward excellence in academic journalism and student empowerment.
             </p>
           </div>
           
@@ -120,10 +111,6 @@ export default function OurTeamPage() {
                       <Building className="w-4 h-4" />
                       <span>{member.university}</span>
                     </div>
-                    <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
-                      <Calendar className="w-4 h-4" />
-                      <span>Joined {member.joinedDate}</span>
-                    </div>
                   </div>
 
                   {/* Specialization */}
@@ -142,17 +129,7 @@ export default function OurTeamPage() {
 
                   
 
-                  {/* Stats */}
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-primary/5 p-3 rounded-lg text-center">
-                      <div className="text-lg font-bold text-primary">{member.articlesPublished}</div>
-                      <div className="text-xs text-gray-600">Articles</div>
-                    </div>
-                    <div className="bg-primary/5 p-3 rounded-lg text-center">
-                      <div className="text-lg font-bold text-primary">{member.graduationYear}</div>
-                      <div className="text-xs text-gray-600">Graduated</div>
-                    </div>
-                  </div>
+
 
                   {/* Expertise Tags */}
                   <div className="mb-6">

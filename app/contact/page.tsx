@@ -13,7 +13,7 @@ const contactMethods = [
   {
     icon: MessageSquare,
     title: 'General Inquiries',
-    description: 'Questions about X Times',
+    description: 'Questions about Vertias Today',
     contact: 'info@xtimes.org',
     responseTime: 'Usually within 48 hours'
   },
@@ -33,29 +33,7 @@ const contactMethods = [
   }
 ];
 
-const teamContacts = [
-  {
-    name: 'Dr. Maya Johnson',
-    role: 'Editor-in-Chief',
-    email: 'maya@xtimes.org',
-    speciality: 'Cultural History & Social Justice',
-    image: '/avatars/maya.jpg'
-  },
-  {
-    name: 'Dr. Sarah Green',
-    role: 'Senior Editor - Environmental Justice',
-    email: 'sarah@xtimes.org',
-    speciality: 'Environmental Science & Sustainability',
-    image: '/avatars/sarah.jpg'
-  },
-  {
-    name: 'Alex Chen',
-    role: 'Technology Editor',
-    email: 'alex@xtimes.org',
-    speciality: 'AI & Technology Ethics',
-    image: '/avatars/alex.jpg'
-  }
-];
+
 
 export default function ContactPage() {
   return (
@@ -77,7 +55,7 @@ export default function ContactPage() {
             
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 leading-tight">
               Contact
-              <span className="block text-yellow-300">X Times</span>
+              <span className="block text-yellow-300">Vertias Today</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-4xl mx-auto mb-8">
@@ -241,7 +219,7 @@ export default function ContactPage() {
                   className="mt-1 h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                 />
                 <label htmlFor="newsletter" className="text-sm text-gray-700">
-                  I'd like to subscribe to the X Times newsletter for updates and new content.
+                  I'd like to subscribe to the Vertias Today newsletter for updates and new content.
                 </label>
               </div>
 
@@ -259,40 +237,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Team Contacts */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
-              Editorial Team
-            </h2>
-            <p className="text-lg text-gray-700 max-w-3xl mx-auto">
-              Connect directly with our editorial team members for specific inquiries.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {teamContacts.map((member, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-xl hover:shadow-lg transition-shadow text-center">
-                <div className="w-20 h-20 bg-gradient-to-br from-primary-light to-primary-dark rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl text-white font-bold">
-                    {member.name.split(' ').map(n => n[0]).join('')}
-                  </span>
-                </div>
-                <h3 className="text-xl font-serif font-bold text-gray-900 mb-1">{member.name}</h3>
-                <p className="text-primary font-semibold mb-2">{member.role}</p>
-                <p className="text-gray-600 text-sm mb-4">{member.speciality}</p>
-                <a 
-                  href={`mailto:${member.email}`}
-                  className="text-primary hover:text-primary-dark font-semibold text-sm transition-colors"
-                >
-                  {member.email}
-                </a>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* FAQ */}
       <section className="py-16 bg-gradient-to-br from-gray-100 to-gray-200">
@@ -302,14 +247,14 @@ export default function ContactPage() {
               Frequently Asked Questions
             </h2>
             <p className="text-lg text-gray-700">
-              Quick answers to common questions about X Times.
+              Quick answers to common questions about Vertias Today.
             </p>
           </div>
           
           <div className="space-y-6">
             {[
               {
-                question: "How do I submit an article to X Times?",
+                question: "How do I submit an article to Vertias Today?",
                 answer: "You can submit articles through our submission page. Fill out the form with your article details and upload your manuscript. Our editorial team will review it within 1-2 weeks."
               },
               {
