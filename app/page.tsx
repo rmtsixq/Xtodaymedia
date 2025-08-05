@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, TrendingUp, Calendar, Users, BookOpen, Video, Headphones } from 'lucide-react';
+import { ArrowRight, TrendingUp, Calendar, Users, BookOpen, Video, Headphones, Mail, Star, Globe, Award, ChevronRight, Search } from 'lucide-react';
 import ArticleCard from '@/components/ArticleCard';
 import VideoCard from '@/components/VideoCard';
 import PodcastCard from '@/components/PodcastCard';
@@ -9,33 +9,70 @@ import { featuredContent, articles, videos, podcasts, categories } from '@/lib/d
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary-light via-primary to-primary-dark text-white">
+      {/* Hero Section - Newsletter Style */}
+      <section className="relative bg-gradient-to-br from-primary-light via-primary to-primary-dark text-white overflow-hidden">
         <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-6 leading-tight">
-                X times
-              </h1>
-              <p className="text-xl md:text-2xl mb-8 text-white/90 leading-relaxed">
-                The Middle East's largest student-led academic journal delivering trustworthy journalism through articles, videos, and podcasts.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
-                  href="/articles"
-                  className="bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-200 text-center"
-                >
-                  Explore Articles
-                </Link>
-                <Link 
-                  href="/about-us/aim-and-scope"
-                  className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors duration-200 text-center"
-                >
-                  About Us
-                </Link>
-              </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-primary-dark opacity-60"></div>
+        
+                 <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
+           <div className="text-center">
+             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 mb-8">
+               <Star className="w-4 h-4 text-yellow-300" />
+               <span className="text-sm font-medium">The Middle East's Leading Academic Journal</span>
+             </div>
+             
+             <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif font-bold leading-tight mb-8">
+               X Times
+             </h1>
+             
+             <p className="text-xl md:text-2xl text-white/90 leading-relaxed max-w-3xl mx-auto mb-12">
+               Student-led academic journalism delivering trustworthy insights across STEM, politics, philosophy, and social justice through articles, videos, and podcasts.
+             </p>
+             
+             <div className="flex flex-col sm:flex-row gap-4 justify-center">
+               <Link 
+                 href="/articles"
+                 className="bg-white text-primary px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-all duration-300 text-center shadow-lg hover:shadow-xl"
+               >
+                 Explore Latest Articles
+               </Link>
+               <Link 
+                 href="#newsletter"
+                 className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-primary transition-all duration-300 text-center"
+               >
+                 Subscribe to Newsletter
+               </Link>
+             </div>
+           </div>
+         </div>
+      </section>
+
+      {/* Newsletter Subscription Section */}
+      <section id="newsletter" className="py-16 bg-gradient-to-r from-accent to-accent-dark">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20">
+            <Mail className="w-12 h-12 text-white mx-auto mb-6" />
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
+              Stay Updated with X Times
+            </h2>
+            <p className="text-lg text-white/90 mb-8 max-w-2xl mx-auto">
+              Get our weekly newsletter with the latest articles, research insights, and thought-provoking content delivered directly to your inbox.
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+              <input 
+                type="email" 
+                placeholder="Enter your email address"
+                className="flex-1 px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
+              />
+              <button className="bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300 whitespace-nowrap">
+                Subscribe Now
+              </button>
             </div>
+            
+            <p className="text-sm text-white/70 mt-4">
+              Join 5,000+ readers. No spam, unsubscribe anytime.
+            </p>
           </div>
         </div>
       </section>
@@ -56,7 +93,7 @@ export default function HomePage() {
             </div>
             <Link 
               href="/articles?filter=editors-pick"
-              className="hidden sm:flex items-center space-x-2 text-primary hover:text-primary-dark font-semibold transition-colors duration-200"
+              className="hidden sm:flex items-center space-x-2 text-primary hover:text-primary-dark font-semibold transition-colors duration-200 bg-white px-6 py-3 rounded-lg shadow-sm hover:shadow-md"
             >
               <span>View All</span>
               <ArrowRight className="w-5 h-5" />
@@ -68,21 +105,11 @@ export default function HomePage() {
               <ArticleCard key={article.id} article={article} variant="featured" />
             ))}
           </div>
-          
-          <div className="text-center mt-8 sm:hidden">
-            <Link 
-              href="/articles?filter=editors-pick"
-              className="inline-flex items-center space-x-2 text-primary hover:text-primary-dark font-semibold transition-colors duration-200"
-            >
-              <span>View All Editor's Picks</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
         </div>
       </section>
 
       {/* Categories Section */}
-      <section className="py-16 bg-gradient-to-r from-accent to-accent-dark">
+      <section className="py-16 bg-gradient-to-r from-primary to-primary-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
@@ -95,7 +122,7 @@ export default function HomePage() {
           
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {categories.map((category, index) => {
-              const icons = [BookOpen, TrendingUp, Users, Calendar, Video, Headphones];
+              const icons = [BookOpen, TrendingUp, Users, Calendar, Video, Headphones, Globe];
               const IconComponent = icons[index % icons.length];
               
               return (
@@ -117,47 +144,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Recent Articles */}
-      <section className="py-16 bg-gradient-to-br from-gray-200 to-gray-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
-                Recent Articles
-              </h2>
-              <p className="text-lg text-gray-700">
-                Stay up to date with our latest research and insights.
-              </p>
-            </div>
-            <Link 
-              href="/articles"
-              className="hidden sm:flex items-center space-x-2 text-primary hover:text-primary-dark font-semibold transition-colors duration-200"
-            >
-              <span>View All</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredContent.latestArticles.map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
-          
-          <div className="text-center mt-8 sm:hidden">
-            <Link 
-              href="/articles"
-              className="inline-flex items-center space-x-2 text-primary hover:text-primary-dark font-semibold transition-colors duration-200"
-            >
-              <span>View All Articles</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* Multimedia Content */}
-      <section className="py-16 bg-gradient-to-r from-primary to-primary-dark">
+      <section className="py-16 bg-gradient-to-br from-gray-900 to-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-white mb-4">
@@ -201,48 +189,47 @@ export default function HomePage() {
       </section>
 
       {/* Community & Involvement */}
-      <section className="py-16 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+      <section className="py-16 bg-gradient-to-br from-accent-light to-accent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
               Join Our Community
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Become part of our vibrant community. Contribute your insights, share your stories, 
-              and help us create a platform for knowledge and innovation.
+            <p className="text-xl text-gray-700 max-w-3xl mx-auto">
+              Become part of our vibrant community of writers, thinkers, and change-makers.
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Link
               href="/about-us/our-team"
-              className="bg-white/10 backdrop-blur-sm p-8 rounded-xl hover:bg-white/20 transition-all duration-300 text-center group border border-white/20"
+              className="bg-white p-8 rounded-xl hover:shadow-lg transition-all duration-300 text-center group border-2 border-transparent hover:border-primary"
             >
               <Users className="w-12 h-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="text-xl font-serif font-bold mb-3">Meet the Team</h3>
-              <p className="text-gray-300">
-                Get to know the passionate individuals behind X times and their areas of expertise.
+              <h3 className="text-xl font-serif font-bold mb-3 text-gray-900">Meet the Team</h3>
+              <p className="text-gray-600">
+                Get to know the passionate individuals behind X Times and their areas of expertise.
               </p>
             </Link>
             
             <Link
-              href="/get-involved/join-us"
-              className="bg-white/10 backdrop-blur-sm p-8 rounded-xl hover:bg-white/20 transition-all duration-300 text-center group border border-white/20"
+              href="/submit"
+              className="bg-white p-8 rounded-xl hover:shadow-lg transition-all duration-300 text-center group border-2 border-transparent hover:border-primary"
             >
               <BookOpen className="w-12 h-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="text-xl font-serif font-bold mb-3">Get Involved</h3>
-              <p className="text-gray-300">
-                Join our team of writers, editors, and contributors to help shape the future of journalism.
+              <h3 className="text-xl font-serif font-bold mb-3 text-gray-900">Submit Your Work</h3>
+              <p className="text-gray-600">
+                Share your research, articles, and insights with our growing community of readers.
               </p>
             </Link>
             
             <Link
-              href="/get-involved/contact-us"
-              className="bg-white/10 backdrop-blur-sm p-8 rounded-xl hover:bg-white/20 transition-all duration-300 text-center group border border-white/20"
+              href="/contact"
+              className="bg-white p-8 rounded-xl hover:shadow-lg transition-all duration-300 text-center group border-2 border-transparent hover:border-primary"
             >
-              <Calendar className="w-12 h-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
-              <h3 className="text-xl font-serif font-bold mb-3">Contact Us</h3>
-              <p className="text-gray-300">
+              <Mail className="w-12 h-12 text-primary mx-auto mb-4 group-hover:scale-110 transition-transform duration-300" />
+              <h3 className="text-xl font-serif font-bold mb-3 text-gray-900">Contact Us</h3>
+              <p className="text-gray-600">
                 Have a story idea, feedback, or want to collaborate? We'd love to hear from you.
               </p>
             </Link>
